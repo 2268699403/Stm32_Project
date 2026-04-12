@@ -1,46 +1,73 @@
-#include "stm32f10x.h"                  // Device header
+#include "stm32f10x.h"                
+#include "Key.h"
 
-volatile int num = 0;
-
+/**
+  * 函    数：TIM1定时器初始化
+  * 参    数：无
+  * 返 回 值：无
+  * 功能说明：配置TIM1为1ms定时中断
+  *           系统时钟72MHz，预分频72-1，计数时钟1MHz
+  *           自动重装载值1000-1，每1ms产生一次中断
+  */
 void Timer_Init()
 {
+	/* 使能TIM1时钟 */
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1,ENABLE);
+	/* 选择内部时钟作为TIM1的时钟源 */
 	TIM_InternalClockConfig(TIM1);
-	
+	/* 配置定时器基本参数 */
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
 	
-	TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
-	TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
-	TIM_TimeBaseInitStructure.TIM_Period = 1000 - 1;
-	TIM_TimeBaseInitStructure.TIM_Prescaler = 72 - 1;
-	TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;
+	TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;			// 时钟分频，不分频
+	TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;		// 向上计数模式
+	TIM_TimeBaseInitStructure.TIM_Period = 1000 - 1;					// 自动重装载值，计1000个数
+	TIM_TimeBaseInitStructure.TIM_Prescaler = 72 - 1;					// 预分频系数，72MHz/72=1MHz
+	TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;				// 重复计数器，高级定时器特有
 	
+	/* 应用配置 */
 	TIM_TimeBaseInit(TIM1,&TIM_TimeBaseInitStructure);
+	/* 使能定时器更新中断 */
 	TIM_ITConfig(TIM1,TIM_IT_Update,ENABLE);
+	/* 清除可能存在的更新中断标志 */
 	TIM_ClearITPendingBit(TIM1,TIM_IT_Update);
-
+	/* 配置NVIC中断控制器 */
 	NVIC_InitTypeDef NVIC_InitStructure;
 	
-	NVIC_InitStructure.NVIC_IRQChannel = TIM1_UP_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannel = TIM1_UP_IRQn;					// TIM1更新中断通道
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;						// 使能中断通道
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;			// 抢占优先级0
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;					// 子优先级0
 	
+	/* 应用NVIC配置 */
 	NVIC_Init(&NVIC_InitStructure);
-	
+	/* 使能定时器 */
 	TIM_Cmd(TIM1,ENABLE);
 	
 }
 
+/**
+  * 函    数：TIM1更新中断服务函数
+  * 参    数：无
+  * 返 回 值：无
+  * 功能说明：TIM1计数器溢出时自动调用，清除中断标志并累加计数器
+  *           此函数名必须为TIM1_UP_IRQHandler，这是STM32标准库的约定
+  */
 void TIM1_UP_IRQHandler(void)
-{
+{	
+	/* 检查是否为更新中断（计数器溢出） */
     if (TIM_GetITStatus(TIM1, TIM_IT_Update) != RESET)
     {
+		static int count = 0;
+		count++;
+		
+		if(count >=20)
+		{
+			Key_Scan();
+			count = 0;
+		}
+		
         /* 清除中断标志 */
-        TIM_ClearITPendingBit(TIM1, TIM_IT_Update);
-        
-        /* 增加计数器 */
-        num++;
-		        
+        TIM_ClearITPendingBit(TIM1, TIM_IT_Update);	        
     }
 }
+

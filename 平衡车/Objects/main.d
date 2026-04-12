@@ -33,3 +33,6 @@
 .\objects\main.o: .\Hardware\OLED_Data.h
 .\objects\main.o: .\Hardware\LED.h
 .\objects\main.o: .\Hardware\Timer.h
+.\objects\main.o: .\Hardware\USART1.h
+.\objects\main.o: .\Hardware\USART2.h
+.\objects\main.o: .\Hardware\Key.h

@@ -3,18 +3,19 @@
 #include "OLED.h"
 #include "LED.h"
 #include "Timer.h"
+#include "USART1.h"
+#include "USART2.h"
+#include "Key.h"
 
-extern volatile int num;
 
 int main(void)
 {
 	OLED_Init();
 	Timer_Init();
-
+	Key_Init();
+	
 	while(1)
 	{
-		OLED_ShowNum(0,0,num,5,OLED_8X16);
-		OLED_Update();
 
 	}
 }
