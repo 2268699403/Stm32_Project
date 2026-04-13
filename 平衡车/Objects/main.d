@@ -36,3 +36,5 @@
 .\objects\main.o: .\Hardware\USART1.h
 .\objects\main.o: .\Hardware\USART2.h
 .\objects\main.o: .\Hardware\Key.h
+.\objects\main.o: .\Hardware\MPU6050.h
+.\objects\main.o: .\Hardware\MPU6050_Reg.h
