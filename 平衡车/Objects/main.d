@@ -38,3 +38,5 @@
 .\objects\main.o: .\Hardware\Key.h
 .\objects\main.o: .\Hardware\MPU6050.h
 .\objects\main.o: .\Hardware\MPU6050_Reg.h
+.\objects\main.o: .\Hardware\Motor.h
+.\objects\main.o: .\Hardware\PWM.h

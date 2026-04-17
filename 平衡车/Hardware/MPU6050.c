@@ -101,7 +101,7 @@ uint8_t I2C_ReadByte(uint8_t DevAddr,uint8_t RegAddr)
 	Data = I2C_ReceiveData(I2C2);
 
 	/*恢复ACK*/
-	I2C_AcknowledgeConfig(I2C1,ENABLE);
+	I2C_AcknowledgeConfig(I2C2,ENABLE);
 	
 	return Data;
 }
@@ -219,4 +219,3 @@ uint8_t MPU6050_GetRawData(MPU6050_Data *pData)
     
     return 0;
 }
-

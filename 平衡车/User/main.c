@@ -8,20 +8,30 @@
 #include "Key.h"
 #include "MPU6050.h"
 #include "MPU6050_Reg.h"
+#include "Motor.h"
+#include "PWM.h"
 
 int main(void)
 {
 	OLED_Init();
-	MPU6050_Init();
-	MPU6050_Config();
-	MPU6050_Data Data;
+	Motor_Init();
+	Motor_Speed(Motor_L,20);
+	Motor_Speed(Motor_R,20);
+	
 	while(1)
 	{
-		MPU6050_GetRawData(&Data);
-		OLED_ShowSignedNum(0,0,Data.Gyro_X,8,OLED_8X16);
-		OLED_ShowSignedNum(0,16,Data.Gyro_Y,8,OLED_8X16);
-		OLED_ShowSignedNum(0,32,Data.Gyro_Z,8,OLED_8X16);
+		Motor_Direction(Motor_L,Motor_FWD);
+		Delay_ms(500);
+		Motor_Direction(Motor_L,Motor_REV);
+		Delay_ms(500);		
+		Motor_Direction(Motor_L,Motor_STOP);
+		Delay_ms(500);
 		
-		OLED_Update();		
+		Motor_Direction(Motor_R,Motor_FWD);
+		Delay_ms(500);
+		Motor_Direction(Motor_R,Motor_REV);
+		Delay_ms(500);		
+		Motor_Direction(Motor_R,Motor_STOP);
+		Delay_ms(500);
 	}
 }
