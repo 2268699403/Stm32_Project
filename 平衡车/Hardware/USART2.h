@@ -6,7 +6,7 @@
 void USART2_Init(void);
 void USART2_SendByte(uint8_t Data);
 void USART2_SendString(char *String);
-void Serial_Printf(char *format, ...);
+void USART2_Printf(char *format, ...);
 
 
 #endif

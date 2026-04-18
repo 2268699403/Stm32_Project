@@ -1,6 +1,8 @@
 #include "stm32f10x.h"       
 #include "Timer.h"
 #include "Key.h"
+#include "Encoder.h"
+
 
 /**
   * 函    数：TIM1定时器初始化
@@ -58,13 +60,21 @@ void TIM1_UP_IRQHandler(void)
 	/* 检查是否为更新中断（计数器溢出） */
     if (TIM_GetITStatus(TIM1, TIM_IT_Update) != RESET)
     {
-		static int count = 0;
-		count++;
+		static int count_k = 0;
+		static int count_e = 0;
+		count_k++;
+		count_e++;
 		
-		if(count >=20)
+		if(count_k >=10)
+		{
+			Encoder_GetState();
+			count_k = 0;
+		}
+					
+		if(count_e >=20)
 		{
 			Key_Scan();
-			count = 0;
+			count_e = 0;
 		}
 		
         /* 清除中断标志 */

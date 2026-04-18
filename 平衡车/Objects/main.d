@@ -40,3 +40,4 @@
 .\objects\main.o: .\Hardware\MPU6050_Reg.h
 .\objects\main.o: .\Hardware\Motor.h
 .\objects\main.o: .\Hardware\PWM.h
+.\objects\main.o: .\Hardware\Encoder.h

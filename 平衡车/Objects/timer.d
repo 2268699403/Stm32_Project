@@ -30,3 +30,4 @@
 .\objects\timer.o: .\Library\misc.h
 .\objects\timer.o: Hardware\Timer.h
 .\objects\timer.o: Hardware\Key.h
+.\objects\timer.o: Hardware\Encoder.h
