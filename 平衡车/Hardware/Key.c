@@ -30,6 +30,12 @@ uint8_t count2 = 0;
 uint8_t count3 = 0;
 uint8_t count4 = 0;
 
+
+/**
+  *函    数：初始化按键GPIO配置
+  *参    数：无
+  *返 回 值：无
+  */
 void Key_Init(void)
 {
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);	
@@ -49,12 +55,15 @@ void Key_Init(void)
 	GPIO_Init(GPIOA,&GPIO_InitStructure); 
 
 	GPIO_InitStructure.GPIO_Pin = Key_4;
-	GPIO_Init(GPIOA,&GPIO_InitStructure);
-	
-		
+	GPIO_Init(GPIOA,&GPIO_InitStructure);		
 }
 
 
+/**
+  *函    数：按键扫描函数，获取按键状态
+  *参    数：无
+  *返 回 值：无
+  */
 void Key_Scan(void)
 {
 	static uint8_t last_State1 = 1;
@@ -108,84 +117,79 @@ void Key_Scan(void)
 
 }
 
+
+/**
+  *函    数：按键触发模式(长按/短按)判断
+  *参    数：无
+  *返 回 值：无
+  *注    意：调用该函数获取触发模式并处理完事件后，要清除对应Key_Mode
+  */
 void Key_Mode(void)
 {
 	/*判断Key1触发模式*/
-	if(Released1)
+	if(Pressed1 && !Key1_Mode && count1 >= 50)		//长按判断
 	{
-		if(!Key1_Mode && count1 >= 50)	// 长按判断
-		{
-			Key1_Mode = 2;
+		Key1_Mode = 2;
+		count1	  = 0;
+		Pressed1  = 0;
+		Released1 = 0;
+	}
+	if(Released1 && !Key1_Mode && count1 < 50)		//短按判断
+	{
+		    Key1_Mode = 1;  
 			count1	  = 0;
 			Pressed1  = 0;
 			Released1 = 0;
-		}		
-        if(!Key1_Mode && count1 < 50) 	 // 短按判断
-        {
-            Key1_Mode = 1;  
-			count1	  = 0;
-			Pressed1  = 0;
-			Released1 = 0;
-        }		
 	}
 	
-	
 	/*判断Key2触发模式*/
-	if(Released2)
+	if(Pressed2 && !Key2_Mode && count2 >= 50)		//长按判断
 	{
-		if(!Key2_Mode && count2 >= 50)	// 长按判断
-		{
-			Key2_Mode = 2;
+		Key2_Mode = 2;
+		count2	  = 0;
+		Pressed2  = 0;
+		Released2 = 0;
+	}
+	if(Released2 && !Key2_Mode && count2 < 50)		//短按判断
+	{
+		    Key2_Mode = 1;  
 			count2	  = 0;
 			Pressed2  = 0;
 			Released2 = 0;
-		}		
-        if(!Key2_Mode && count2 < 50) 	 // 短按判断
-        {
-            Key2_Mode = 1;  
-			count2	  = 0;
-			Pressed2  = 0;
-			Released2 = 0;
-        }		
 	}
 	
 	/*判断Key3触发模式*/
-	if(Released3)
+	if(Pressed3 && !Key3_Mode && count3 >= 50)		//长按判断
 	{
-		if(!Key3_Mode && count3 >= 50)	// 长按判断
-		{
-			Key3_Mode = 2;
+		Key3_Mode = 2;
+		count3	  = 0;
+		Pressed3  = 0;
+		Released3 = 0;
+	}
+	if(Released3 && !Key3_Mode && count3 < 50)		//短按判断
+	{
+		    Key3_Mode = 1;  
 			count3	  = 0;
 			Pressed3  = 0;
 			Released3 = 0;
-		}		
-        if(!Key3_Mode && count3 < 50) 	 // 短按判断
-        {
-            Key3_Mode = 1;  
-			count3	  = 0;
-			Pressed3  = 0;
-			Released3 = 0;
-        }		
 	}
 	
 	/*判断Key4触发模式*/
-	if(Released4)
+	if(Pressed4 && !Key4_Mode && count4 >= 50)		//长按判断
 	{
-		if(!Key4_Mode && count4 >= 50)	// 长按判断
-		{
-			Key4_Mode = 2;
-			count4	  = 0;
-			Pressed4  = 0;
-			Released4 = 0;
-		}		
-        if(!Key4_Mode && count4 < 50) 	 // 短按判断
-        {
-            Key4_Mode = 1;  
-			count4	  = 0;
-			Pressed4  = 0;
-			Released4 = 0;
-        }		
+		Key4_Mode = 2;
+		count4	  = 0;
+		Pressed4  = 0;
+		Released4 = 0;
 	}
+	if(Released4 && !Key4_Mode && count4 < 50)		//短按判断
+	{
+		    Key4_Mode = 1;  
+			count4	  = 0;
+			Pressed4  = 0;
+			Released4 = 0;
+	}
+	
 	
 }
 

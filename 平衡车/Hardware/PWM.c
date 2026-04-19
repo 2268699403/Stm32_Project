@@ -22,8 +22,8 @@ void PWM_Init(void)
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
 	TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
-	TIM_TimeBaseInitStructure.TIM_Period = 7200 - 1;
-	TIM_TimeBaseInitStructure.TIM_Prescaler = 0;
+	TIM_TimeBaseInitStructure.TIM_Period = 7200 - 1;			//频率为10k				
+	TIM_TimeBaseInitStructure.TIM_Prescaler = 1 - 1;
 	
 	TIM_TimeBaseInit(TIM2,&TIM_TimeBaseInitStructure);
 	

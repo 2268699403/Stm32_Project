@@ -15,25 +15,16 @@
 int main(void)
 {
 	OLED_Init();
-	Encoder_Init();
-	Motor_Init();
 	Timer_Init();
+	Key_Init();
 	
 	while(1)
 	{
-		
-		Motor_Speed(Motor_L,10);
-		Motor_Speed(Motor_R,10);
-				
-		Motor_Direction(Motor_L,Motor_FWD);
-		Motor_Direction(Motor_R,Motor_FWD);
-		uint16_t encoder1_count = TIM_GetCounter(TIM3);
-		OLED_ShowFloatNum(0,0,RPM_L,5,5,OLED_8X16);
-		uint16_t encoder2_count = TIM_GetCounter(TIM4);
-		OLED_ShowFloatNum(0,17,RPM_R,5,5,OLED_8X16);
+		Key_Mode();
+		OLED_ShowNum( 0,0,Key1_Mode,1,OLED_8X16);
+		OLED_ShowNum(10,0,Key2_Mode,1,OLED_8X16);
+		OLED_ShowNum(20,0,Key3_Mode,1,OLED_8X16);
+		OLED_ShowNum(30,0,Key4_Mode,1,OLED_8X16);
 		OLED_Update();
-		
-//		USART2_Printf("RPM_L: %.2f\r\n",RPM_L);
-//		USART2_Printf("RPM_R: %.2f\r\n",RPM_R);
 	}
 }

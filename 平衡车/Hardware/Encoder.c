@@ -1,8 +1,14 @@
 #include "stm32f10x.h" 
 
+/*初始化转速变量*/
 float RPM_L = 0;
 float RPM_R = 0;
 
+/**
+  *函    数：初始化编码器接口PA6、PA7、PB6、PB7和TIM3、TIM4编码模式配置
+  *参    数：无
+  *返 回 值：无
+  */
 void Encoder_Init(void)
 {
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3,ENABLE);
@@ -36,11 +42,18 @@ void Encoder_Init(void)
 
 }
 
+
+/**
+  *函    数：转速计算
+  *参    数：无
+  *返 回 值：无
+  */
 void Encoder_GetState(void)
 {
 	int16_t Count_L = TIM_GetCounter(TIM4);
 	int16_t Count_R = TIM_GetCounter(TIM3);
 	
+	/*编码电机旋转一圈触发44次脉冲，电机减速比9.6*/
 	RPM_L = (Count_L * 6000.0f) / (44.0f * 9.6f);
 	RPM_R = (Count_R * 6000.0f) / (44.0f * 9.6f);
 	
