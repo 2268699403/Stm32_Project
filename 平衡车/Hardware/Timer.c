@@ -2,6 +2,8 @@
 #include "Timer.h"
 #include "Key.h"
 #include "Encoder.h"
+#include "MPU6050.h"
+#include "USART1.h"
 
 
 /**
@@ -60,23 +62,25 @@ void TIM1_UP_IRQHandler(void)
 	/* 检查是否为更新中断（计数器溢出） */
     if (TIM_GetITStatus(TIM1, TIM_IT_Update) != RESET)
     {
-		static int count_k = 0;
-		static int count_e = 0;
-		count_k++;
-		count_e++;
-		
-		if(count_k >=10)
+		static int count_1 = 0;
+		static int count_2 = 0;
+		count_1++;
+		count_2++;
+				
+		if(count_1 >=10)
 		{
-			Encoder_GetState();
-			count_k = 0;
+
+			MPU6050_GetRawData(&Data);		//读取MPU6050初值
+			Encoder_GetState();				//读取编码电机转速
+			count_1 = 0;
 		}
 					
-		if(count_e >=20)
+		if(count_2 >=20)
 		{
-			Key_Scan();
-			count_e = 0;
+			Key_Scan();						//读取按键状态
+			count_2 = 0;
 		}
-		
+							
         /* 清除中断标志 */
         TIM_ClearITPendingBit(TIM1, TIM_IT_Update);	        
     }

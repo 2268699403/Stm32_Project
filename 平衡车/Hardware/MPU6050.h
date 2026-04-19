@@ -2,6 +2,10 @@
 #define __MPU6050_H
 #include "MPU6050_Reg.h"
 
+extern MPU6050_Data Data;
+extern float AngleAcc;
+extern float AngleGyro;
+extern float Angle;
 void MPU6050_Init(void);
 uint8_t MPU6050_Config(void);
 uint8_t MPU6050_GetRawData(MPU6050_Data *pData);

@@ -16,15 +16,16 @@ int main(void)
 {
 	OLED_Init();
 	Timer_Init();
-	Key_Init();
-	
+	USART1_Init();
+	MPU6050_Init();
+	MPU6050_Config();
 	while(1)
-	{
-		Key_Mode();
-		OLED_ShowNum( 0,0,Key1_Mode,1,OLED_8X16);
-		OLED_ShowNum(10,0,Key2_Mode,1,OLED_8X16);
-		OLED_ShowNum(20,0,Key3_Mode,1,OLED_8X16);
-		OLED_ShowNum(30,0,Key4_Mode,1,OLED_8X16);
+	{			
+		OLED_ShowSignedNum(0, 0,Angle,5,OLED_8X16);
+		OLED_ShowSignedNum(0,17,AngleAcc,5,OLED_8X16);
+		OLED_ShowSignedNum(0,33,AngleGyro,5,OLED_8X16);
+		OLED_ShowSignedNum(0, 49,Data.Gyro_Y,5,OLED_8X16);
+				
 		OLED_Update();
 	}
 }

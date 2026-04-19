@@ -2,7 +2,13 @@
 #include "MPU6050.h"
 #include "MPU6050_Reg.h"
 #include "Delay.h"
+#include <math.h>
 
+
+MPU6050_Data Data;
+float AngleAcc;			//加速度计算俯仰角
+float AngleGyro;		//角速度计算俯仰角
+float Angle;			//互补滤波后俯仰角
 
 /**
   *函    数：初始化GPIO，I2C等外设
@@ -31,6 +37,24 @@ void MPU6050_Init(void)
 	I2C_Cmd(I2C2,ENABLE);	
 }
 
+
+/**
+  *函    数：封装I2C_CheckEvent函数，增加超时退出机制
+  *参    数：I2C_CheckEvent(I2C_TypeDef* I2Cx, uint32_t I2C_EVENT)原参数
+  *返 回 值：无
+  */
+void WaitEvent(I2C_TypeDef* I2Cx, uint32_t I2C_EVENT)
+{
+	uint32_t timeout = 50000;
+	while(I2C_CheckEvent(I2Cx,I2C_EVENT) == ERROR)
+	{
+		timeout--;
+		if(timeout <= 1)
+		{break;}
+	}	
+}
+
+
 /**
   *函    数：I2C写入1个字节
   *参    数：设备地址DevAddr
@@ -42,19 +66,19 @@ void I2C_WriteByte(uint8_t DevAddr,uint8_t RegAddr,uint8_t Data)
 {
 	/*发送起始条件*/
 	I2C_GenerateSTART(I2C2,ENABLE);
-	while(I2C_CheckEvent(I2C2,I2C_EVENT_MASTER_MODE_SELECT) == ERROR);
+	WaitEvent(I2C2,I2C_EVENT_MASTER_MODE_SELECT);
 	
 	/*发送设备地址*/
 	I2C_Send7bitAddress(I2C2,DevAddr,I2C_Direction_Transmitter);
-	while(I2C_CheckEvent(I2C2,I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED) == ERROR);
+	WaitEvent(I2C2,I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED);
 	
 	/*发送寄存器地址*/
 	I2C_SendData(I2C2,RegAddr);
-	while(I2C_CheckEvent(I2C2,I2C_EVENT_MASTER_BYTE_TRANSMITTING) == ERROR);
+	WaitEvent(I2C2,I2C_EVENT_MASTER_BYTE_TRANSMITTING);
 
 	/*发送字节数据*/
 	I2C_SendData(I2C2,Data);
-	while(I2C_CheckEvent(I2C2,I2C_EVENT_MASTER_BYTE_TRANSMITTED) == ERROR);
+	WaitEvent(I2C2,I2C_EVENT_MASTER_BYTE_TRANSMITTED);
 	
 	/*发送停止条件*/	
 	I2C_GenerateSTOP(I2C2,ENABLE);
@@ -72,23 +96,23 @@ uint8_t I2C_ReadByte(uint8_t DevAddr,uint8_t RegAddr)
 	
 	/*发送起始条件*/
 	I2C_GenerateSTART(I2C2,ENABLE);
-	while(I2C_CheckEvent(I2C2,I2C_EVENT_MASTER_MODE_SELECT) == ERROR);
+	WaitEvent(I2C2,I2C_EVENT_MASTER_MODE_SELECT);
 	
 	/*发送设备地址*/
 	I2C_Send7bitAddress(I2C2,DevAddr,I2C_Direction_Transmitter);
-	while(I2C_CheckEvent(I2C2,I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED) == ERROR);
+	WaitEvent(I2C2,I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED);
 	
 	/*发送寄存器地址*/
 	I2C_SendData(I2C2,RegAddr);
-	while(I2C_CheckEvent(I2C2,I2C_EVENT_MASTER_BYTE_TRANSMITTING) == ERROR);
+	WaitEvent(I2C2,I2C_EVENT_MASTER_BYTE_TRANSMITTING);
 	
 	/*发送重复起始条件*/
 	I2C_GenerateSTART(I2C2,ENABLE);
-	while(I2C_CheckEvent(I2C2,I2C_EVENT_MASTER_MODE_SELECT) == ERROR);
+	WaitEvent(I2C2,I2C_EVENT_MASTER_MODE_SELECT);
 
 	/*发送设备地址*/
 	I2C_Send7bitAddress(I2C2,DevAddr,I2C_Direction_Receiver);
-	while(I2C_CheckEvent(I2C2,I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED) == ERROR);
+	WaitEvent(I2C2,I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED);
 	
 	/*禁止ACK*/
 	I2C_AcknowledgeConfig(I2C2,DISABLE);
@@ -97,7 +121,7 @@ uint8_t I2C_ReadByte(uint8_t DevAddr,uint8_t RegAddr)
 	I2C_GenerateSTOP(I2C2, ENABLE);
 	
 	/*等待数据读取*/
-	while(I2C_CheckEvent(I2C2,I2C_EVENT_MASTER_BYTE_RECEIVED) == ERROR);
+	WaitEvent(I2C2,I2C_EVENT_MASTER_BYTE_RECEIVED);
 	Data = I2C_ReceiveData(I2C2);
 
 	/*恢复ACK*/
@@ -120,23 +144,23 @@ uint8_t I2C_ReadBytes(uint8_t DevAddr, uint8_t RegAddr, uint8_t *Data, uint8_t L
     
     /*发送起始条件*/
     I2C_GenerateSTART(I2C2, ENABLE);
-    while(I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_MODE_SELECT) == ERROR);
+    WaitEvent(I2C2, I2C_EVENT_MASTER_MODE_SELECT);
     
     /*发送设备地址*/
     I2C_Send7bitAddress(I2C2, DevAddr, I2C_Direction_Transmitter);
-    while(I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED) == ERROR);
+    WaitEvent(I2C2, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED);
     
     /*发送寄存器地址*/
     I2C_SendData(I2C2, RegAddr);
-    while(I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_TRANSMITTED) == ERROR);
+    WaitEvent(I2C2, I2C_EVENT_MASTER_BYTE_TRANSMITTED);
     
     /*发送重复起始条件*/
     I2C_GenerateSTART(I2C2, ENABLE);
-    while(I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_MODE_SELECT) == ERROR);
+    WaitEvent(I2C2, I2C_EVENT_MASTER_MODE_SELECT);
     
     /*发送设备地址*/
     I2C_Send7bitAddress(I2C2, DevAddr, I2C_Direction_Receiver);
-    while(I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED) == ERROR);
+    WaitEvent(I2C2, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED);
     
     /*读取数据*/
     if(Len > 1)
@@ -145,7 +169,7 @@ uint8_t I2C_ReadBytes(uint8_t DevAddr, uint8_t RegAddr, uint8_t *Data, uint8_t L
         
         for(uint8_t i = 0; i < Len - 1; i++)
         {
-            while(I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_RECEIVED) == ERROR);
+            WaitEvent(I2C2, I2C_EVENT_MASTER_BYTE_RECEIVED);
             Data[i] = I2C_ReceiveData(I2C2);
         }
     }
@@ -154,7 +178,7 @@ uint8_t I2C_ReadBytes(uint8_t DevAddr, uint8_t RegAddr, uint8_t *Data, uint8_t L
     I2C_AcknowledgeConfig(I2C2, DISABLE);
     I2C_GenerateSTOP(I2C2, ENABLE);
     
-    while(I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_RECEIVED) == ERROR);
+    WaitEvent(I2C2, I2C_EVENT_MASTER_BYTE_RECEIVED);
     Data[Len-1] = I2C_ReceiveData(I2C2);
     
     /*恢复ACK*/
@@ -187,17 +211,17 @@ uint8_t MPU6050_Config(void)
     I2C_WriteByte(MPU6050_ADDR_W, MPU6050_CONFIG, 0x00);  // 禁用
     
     /*设置陀螺仪量程*/
-    I2C_WriteByte(MPU6050_ADDR_W, MPU6050_GYRO_CONFIG, MPU6050_GYRO_FS_250);
+    I2C_WriteByte(MPU6050_ADDR_W, MPU6050_GYRO_CONFIG, MPU6050_GYRO_FS_2000);
     
     /*设置加速度计量程*/
-    I2C_WriteByte(MPU6050_ADDR_W, MPU6050_ACCEL_CONFIG, MPU6050_ACCEL_FS_2);
+    I2C_WriteByte(MPU6050_ADDR_W, MPU6050_ACCEL_CONFIG, MPU6050_ACCEL_FS_16);
     
     return 0;
 }
 
 /**
   *函    数:读取MPU6050原始数据
-  *参    数：pData: 数据指针
+  *参    数：pData: 结构体指针
   *返 回 值：0:成功 1:失败
   */
 uint8_t MPU6050_GetRawData(MPU6050_Data *pData)
@@ -216,6 +240,34 @@ uint8_t MPU6050_GetRawData(MPU6050_Data *pData)
     pData->Gyro_X  = (buffer[8] << 8) | buffer[9];
     pData->Gyro_Y  = (buffer[10] << 8) | buffer[11];
     pData->Gyro_Z  = (buffer[12] << 8) | buffer[13];
-    
+	
+	/*陀螺仪校准，抑制零飘*/
+	pData->Gyro_Y -= 43;
+	
+	/** 
+	  * 加速度俯仰角计算
+	  * atan2(pData->Accel_X, pData->Accel_Z)：计算加速度计X轴与Z轴比值的反正切，得到弧度值
+	  * 乘以180/π将弧度转换为角度，得到基于加速度计的俯仰角（-180°~180°）
+	  */ 
+	AngleAcc  = atan2(pData->Accel_X,pData->Accel_Z) * 180.f / 3.14159f;
+  
+	/** 
+	  * 陀螺仪俯仰角计算
+	  * -pData->Gyro_Y：陀螺仪Y轴数据取负，统一正方向
+	  * 将16位有符号整数（-32768~32767）归一化到-1~1范围
+	  * *2000：乘以陀螺仪量程（±2000°/s），得到实际角速度（°/s）
+	  * *0.01：乘以采样时间间隔（10ms），得到该时间段的角度变化量
+	  * Angle + ...将角度变化量叠加到上一时刻的角度上，实现积分运算
+	  */ 
+	AngleGyro = Angle + -pData->Gyro_Y / 32768.0 * 2000 * 0.01;					
+	
+	/** 互补滤波融合计算最终俯仰角
+	  * 原理：加速度计在静态时准确但动态响应慢，陀螺仪动态响应快但存在积分漂移
+	  * 融合公式：最终角度 = Kp*加速度计角度 + (1-Kp)*陀螺仪积分角度
+	  * 效果：用加速度计的低频信号修正陀螺仪的低频漂移，保留陀螺仪的高频动态特性
+	  */
+	float Kp = 0.01;									//权值Kp(0~1)
+	Angle = Kp * AngleAcc + (1 - Kp) * AngleGyro;
+	
     return 0;
 }

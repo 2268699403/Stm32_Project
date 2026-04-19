@@ -91,11 +91,11 @@ void USART2_SendString(char *String)
   */
 void USART2_Printf(char *format, ...)
 {
-	char String[128];					//定义字符数组
-	va_list arg;						//定义可变参数列表数据类型的变量arg
-	va_start(arg, format);				//从format开始，接收参数列表到arg变量
-	vsprintf(String, format, arg);		//使用vsprintf打印格式化字符串和参数列表到字符数组中
-	va_end(arg);						//结束变量arg
-	USART2_SendString(String);			//串口发送字符数组（字符串）
+	char String[128];									//定义字符数组
+	va_list arg;										//定义可变参数列表数据类型的变量arg
+	va_start(arg, format);								//从format开始，接收参数列表到arg变量
+	vsnprintf(String,sizeof(String),format, arg);		//使用vsnprintf打印格式化字符串和参数列表到字符数组中
+	va_end(arg);										//结束变量arg
+	USART2_SendString(String);							//串口发送字符数组（字符串）
 }
 

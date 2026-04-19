@@ -31,3 +31,4 @@
 .\objects\mpu6050.o: Hardware\MPU6050.h
 .\objects\mpu6050.o: Hardware\MPU6050_Reg.h
 .\objects\mpu6050.o: .\System\Delay.h
+.\objects\mpu6050.o: D:\keil 5\ARM\ARMCC\Bin\..\include\math.h

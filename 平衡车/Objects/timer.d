@@ -31,3 +31,6 @@
 .\objects\timer.o: Hardware\Timer.h
 .\objects\timer.o: Hardware\Key.h
 .\objects\timer.o: Hardware\Encoder.h
+.\objects\timer.o: Hardware\MPU6050.h
+.\objects\timer.o: Hardware\MPU6050_Reg.h
+.\objects\timer.o: Hardware\USART1.h
