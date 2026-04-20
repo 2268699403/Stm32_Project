@@ -250,6 +250,8 @@ uint8_t MPU6050_GetRawData(MPU6050_Data *pData)
 	  * 乘以180/π将弧度转换为角度，得到基于加速度计的俯仰角（-180°~180°）
 	  */ 
 	AngleAcc  = atan2(pData->Accel_X,pData->Accel_Z) * 180.f / 3.14159f;
+	/*加速度计归零校准*/
+	AngleAcc -= 0.5;
   
 	/** 
 	  * 陀螺仪俯仰角计算

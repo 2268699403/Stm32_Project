@@ -4,8 +4,11 @@
 #include "Encoder.h"
 #include "MPU6050.h"
 #include "USART1.h"
+#include "PID.h"
+#include "Motor.h"
+#include "LED.h"
 
-
+uint8_t config = 0;
 /**
   * 函    数：TIM1定时器初始化
   * 参    数：无
@@ -68,9 +71,29 @@ void TIM1_UP_IRQHandler(void)
 		count_2++;
 				
 		if(count_1 >=10)
-		{
+		{	
+			if(Key1_Mode == 1)
+			{config = !config;Key1_Mode = 0;}
+			if(config == 1)
+			{
+				LED_ON();
+				if(Angle <= -50 | Angle >= +50)
+				{
+					LED_OFF();
+					Motor_Stop();
+				}
+				else
+				{
+					PID_Angle_Update();				//直立环PID调节
+				}
+			}
+			else
+			{
+				LED_OFF();
+			}
 
-			MPU6050_GetRawData(&Data);		//读取MPU6050初值
+
+			MPU6050_GetRawData(&Data);		//读取MPU6050状态
 			Encoder_GetState();				//读取编码电机转速
 			count_1 = 0;
 		}
@@ -78,6 +101,7 @@ void TIM1_UP_IRQHandler(void)
 		if(count_2 >=20)
 		{
 			Key_Scan();						//读取按键状态
+			Key_Mode();						//判断触发模式
 			count_2 = 0;
 		}
 							
