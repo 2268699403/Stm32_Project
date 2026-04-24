@@ -2,19 +2,19 @@
 #include "Timer.h"
 #include "Key.h"
 
-/*按键模式(1为短按，2为长按)*/
+/*按键模式(1为短按，2为长按) - 显式初始化确保启动时为0*/
 uint8_t Key1_Mode = 0;
 uint8_t Key2_Mode = 0;
 uint8_t Key3_Mode = 0;
 uint8_t Key4_Mode = 0;
 
-/*按键状态(1为松开，0为按下)*/
+/*按键状态(1为松开，0为按下) - 显式初始化确保启动时为1(松开状态)*/
 uint8_t State1 = 1;
 uint8_t State2 = 1;
 uint8_t State3 = 1;
 uint8_t State4 = 1;
 
-/*触发标志(触发置1)*/
+/*触发标志(触发置1) - 显式初始化确保启动时为0*/
 uint8_t Pressed1  = 0;
 uint8_t Released1 = 0;
 uint8_t Pressed2  = 0;
@@ -24,7 +24,7 @@ uint8_t Released3 = 0;
 uint8_t Pressed4  = 0;
 uint8_t Released4 = 0;
 
-/*按下时常(20ms+1)*/
+/*按下时常(20ms+1) - 显式初始化确保启动时为0*/
 uint8_t count1 = 0;
 uint8_t count2 = 0;
 uint8_t count3 = 0;
@@ -70,6 +70,17 @@ void Key_Scan(void)
 	static uint8_t last_State2 = 1;
 	static uint8_t last_State3 = 1;
 	static uint8_t last_State4 = 1;
+	
+	/* 显式初始化静态变量，确保启动时为1(松开状态) */
+	static uint8_t Key_Scan_initialized = 0;
+	if(!Key_Scan_initialized)
+	{
+		last_State1 = 1;
+		last_State2 = 1;
+		last_State3 = 1;
+		last_State4 = 1;
+		Key_Scan_initialized = 1;
+	}
 
 	/*获取按键上次状态*/	
 	last_State1 = State1;

@@ -6,9 +6,9 @@
 
 
 MPU6050_Data Data;
-float AngleAcc;			//加速度计算俯仰角
-float AngleGyro;		//角速度计算俯仰角
-float Angle;			//互补滤波后俯仰角
+float AngleAcc = 0.0f;		//加速度计算俯仰角 - 显式初始化
+float AngleGyro = 0.0f;		//角速度计算俯仰角 - 显式初始化
+float Angle = 0.0f;			//互补滤波后俯仰角 - 显式初始化
 
 /**
   *函    数：初始化GPIO，I2C等外设
@@ -231,6 +231,14 @@ uint8_t MPU6050_GetRawData(MPU6050_Data *pData)
     // 从0x3B开始读取14个字节
     if(I2C_ReadBytes(MPU6050_ADDR_W, MPU6050_ACCEL_XOUT_H, buffer, 14) != 0)
         return 1;
+    
+    /* 检查数据有效性 - 全0或全0xFF表示数据无效 */
+    uint8_t all_zero = 1, all_ff = 1;
+    for(uint8_t i = 0; i < 14; i++) {
+        if(buffer[i] != 0) all_zero = 0;
+        if(buffer[i] != 0xFF) all_ff = 0;
+    }
+    if(all_zero || all_ff) return 1;  // 数据无效，不做更新
     
     // 组合成16位数据
     pData->Accel_X = (buffer[0] << 8) | buffer[1];
