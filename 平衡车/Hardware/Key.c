@@ -2,19 +2,19 @@
 #include "Timer.h"
 #include "Key.h"
 
-/*按键模式(1为短按，2为长按) - 显式初始化确保启动时为0*/
+/*按键模式(1为短按，2为长按)*/
 uint8_t Key1_Mode = 0;
 uint8_t Key2_Mode = 0;
 uint8_t Key3_Mode = 0;
 uint8_t Key4_Mode = 0;
 
-/*按键状态(1为松开，0为按下) - 显式初始化确保启动时为1(松开状态)*/
+/*按键状态(1为松开，0为按下)*/
 uint8_t State1 = 1;
 uint8_t State2 = 1;
 uint8_t State3 = 1;
 uint8_t State4 = 1;
 
-/*触发标志(触发置1) - 显式初始化确保启动时为0*/
+/*触发标志(触发置1)*/
 uint8_t Pressed1  = 0;
 uint8_t Released1 = 0;
 uint8_t Pressed2  = 0;
@@ -24,7 +24,7 @@ uint8_t Released3 = 0;
 uint8_t Pressed4  = 0;
 uint8_t Released4 = 0;
 
-/*按下时常(20ms+1) - 显式初始化确保启动时为0*/
+/*按下时常(20ms+1)*/
 uint8_t count1 = 0;
 uint8_t count2 = 0;
 uint8_t count3 = 0;

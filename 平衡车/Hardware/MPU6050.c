@@ -6,9 +6,9 @@
 
 
 MPU6050_Data Data;
-float AngleAcc = 0.0f;		//加速度计算俯仰角 - 显式初始化
-float AngleGyro = 0.0f;		//角速度计算俯仰角 - 显式初始化
-float Angle = 0.0f;			//互补滤波后俯仰角 - 显式初始化
+float AngleAcc = 0.0f;
+float AngleGyro = 0.0f;
+float Angle = 0.0f;
 
 /**
   *函    数：初始化GPIO，I2C等外设

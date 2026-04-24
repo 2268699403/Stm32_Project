@@ -1,6 +1,5 @@
 #include "stm32f10x.h" 
 
-/*初始化转速变量 - 显式初始化确保启动时为0*/
 float RPM_L = 0.0f;
 float RPM_R = 0.0f;
 

@@ -69,28 +69,15 @@ void TIM1_UP_IRQHandler(void)
 	/* 检查是否为更新中断（计数器溢出） */
     if (TIM_GetITStatus(TIM1, TIM_IT_Update) != RESET)
     {
-		static int count_1 = 0;
-		static int count_2 = 0;
-		static int count_3 = 0;
-		static uint8_t mpu_init_count = 0;  // MPU6050初始化计数器
+		static uint8_t count_1 = 0;
+		static uint8_t count_2 = 0;
+		static uint8_t count_3 = 0;
 		count_1++;
 		count_2++;
 		count_3++;
 				
 		if(count_1 >=10)
 		{	
-			/* MPU6050启动稳定等待 - 前500ms忽略数据 */
-			if(mpu_init_count < 50)
-			{
-				mpu_init_count++;
-				MPU6050_GetRawData(&Data);  // 读取但忽略数据
-				Angle = 0;  // 强制保持角度为0
-				AngleAcc = 0;
-				AngleGyro = 0;
-				count_1 = 0;
-				TIM_ClearITPendingBit(TIM1, TIM_IT_Update);
-				return;  // 跳过本次处理
-			}
 			
 			/* 读取MPU6050数据 */
 			MPU6050_GetRawData(&Data);

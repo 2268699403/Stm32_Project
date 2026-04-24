@@ -16,15 +16,6 @@
 
 int main(void)
 {
-	/* 强制清零关键变量，防止RAM残留 */
-	Angle = 0;
-	AngleAcc = 0;
-	AngleGyro = 0;
-	En = 0;
-	Key1_Mode = 0;
-	Key2_Mode = 0;
-	Key3_Mode = 0;
-	Key4_Mode = 0;
 	
 	OLED_Init();
 	MPU6050_Init();
