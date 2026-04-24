@@ -1,8 +1,15 @@
 #include "stm32f10x.h"    
 #include "stdio.h"
 #include "stdarg.h"
+#include "string.h"
 #include "USART2.h"
+#include "PID.h"
 
+/* 接收缓冲区定义 */
+uint8_t USART2_RxBuffer[USART2_RX_BUFFER_SIZE];
+uint8_t USART2_RxWritePointer = 0;
+uint8_t USART2_RxReadPointer = 0;
+uint8_t USART2_RxFlag = 0;
 
 /**
   * 函    数：UART2串口初始化
@@ -48,6 +55,15 @@ void USART2_Init(void)
 	USART_Cmd(USART2,ENABLE);
 	/* 清除发送完成标志位，避免误触发 */
 	USART_ClearFlag(USART2,USART_FLAG_TC);
+	/* 使能接收中断 */
+	USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
+	/* 配置NVIC */
+	NVIC_InitTypeDef NVIC_InitStructure;
+	NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
 }
 
 /**
@@ -63,6 +79,92 @@ void USART2_SendByte(uint8_t Data)
 	/* 等待发送缓冲区为空（表示数据已转移到移位寄存器） */
 	while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
 }	
+
+/**
+  * 函    数：获取接收完成标志
+  * 参    数：无
+  * 返 回 值：接收完成标志位，1表示完成，0表示未完成
+  */
+uint8_t USART2_GetRxFlag(void)
+{
+	return USART2_RxFlag;
+}
+
+/**
+  * 函    数：清除接收完成标志
+  * 参    数：无
+  * 返 回 值：无
+  */
+void USART2_ClearRxFlag(void)
+{
+	USART2_RxFlag = 0;
+	USART2_RxReadPointer = 0;
+	USART2_RxWritePointer = 0;
+}
+
+/**
+  * 函    数：解析参数并赋值
+  * 参    数：param_name 参数名称（如"Kp"）
+  * 参    数：param_value 目标变量指针（如&PID_Speed.Kp）
+  * 返 回 值：1表示成功解析并赋值，0表示未匹配或解析失败
+  * 功能说明：从接收缓冲区中解析指定参数的值并赋值给目标变量
+  *           支持格式："参数名:值"
+  */
+uint8_t USART2_ParseParam(char *param_name, float *param_value)
+{
+	static uint8_t index = 0;
+	static char command[32];      // 改为char类型
+	static uint8_t command_ready = 0;
+	
+	uint8_t rx_data = 0;
+	float value = 0;
+	char received_param[8] = {0};
+	
+	/* 处理接收缓冲区中的数据 */
+	while((USART2_RxReadPointer != USART2_RxWritePointer) && (index < 31) && !command_ready)
+	{
+		rx_data = USART2_RxBuffer[USART2_RxReadPointer];
+		USART2_RxReadPointer++;
+		USART2_RxReadPointer %= USART2_RX_BUFFER_SIZE;
+		
+		/* 检测换行符，表示一条命令结束 */
+		if(rx_data == '\n' || rx_data == '\r')
+		{
+			if(index > 0)
+			{
+				command[index] = '\0';
+				command_ready = 1;
+			}
+			index = 0;
+		}
+		else
+		{
+			if(index < 31)
+			{
+				command[index++] = rx_data;
+			}
+		}
+	}
+	
+	/* 如果有完整命令，尝试解析 */
+	if(command_ready)
+	{
+		/* 解析格式: "参数名:值" */
+		if(sscanf(command, "%[^:]:%f", received_param, &value) == 2)
+		{
+			/* 检查是否匹配目标参数名 */
+			if(strcmp(received_param, param_name) == 0)
+			{
+				*param_value = value;  // 赋值给目标变量
+				command_ready = 0;
+				return 1;  // 成功解析并赋值
+			}
+		}
+		command_ready = 0;
+	}
+	
+	return 0;  // 未匹配或解析失败
+}
 
 
 /**

@@ -30,4 +30,6 @@
 .\objects\usart2.o: .\Library\misc.h
 .\objects\usart2.o: D:\keil 5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\usart2.o: D:\keil 5\ARM\ARMCC\Bin\..\include\stdarg.h
+.\objects\usart2.o: D:\keil 5\ARM\ARMCC\Bin\..\include\string.h
 .\objects\usart2.o: Hardware\USART2.h
+.\objects\usart2.o: .\User\PID.h

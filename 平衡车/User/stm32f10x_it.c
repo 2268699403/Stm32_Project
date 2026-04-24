@@ -23,6 +23,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
+#include "stm32f10x.h"
+#include "USART2.h"
+#include "PID.h"
 
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
@@ -144,13 +147,27 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief  This function handles PPP interrupt request.
+  * @brief  This function handles USART2 interrupt request.
   * @param  None
   * @retval None
   */
-/*void PPP_IRQHandler(void)
+void USART2_IRQHandler(void)
 {
-}*/
+	if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
+	{
+		uint8_t data = USART_ReceiveData(USART2);
+		
+		/* 将接收到的数据存入缓冲区 */
+		if((USART2_RxWritePointer + 1) % USART2_RX_BUFFER_SIZE != USART2_RxReadPointer)
+		{
+			USART2_RxBuffer[USART2_RxWritePointer] = data;
+			USART2_RxWritePointer++;
+			USART2_RxWritePointer %= USART2_RX_BUFFER_SIZE;
+		}
+		
+		USART_ClearITPendingBit(USART2, USART_IT_RXNE);
+	}
+}
 
 /**
   * @}
