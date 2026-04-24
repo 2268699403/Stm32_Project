@@ -21,10 +21,13 @@ typedef struct {
 } PID_struct;
 
 extern PID_struct PID_Angle;		//直立环配置
+extern PID_struct PID_Speed;		//速度环配置
 
 void PID_Init(PID_struct *p);
 void PID_Update(PID_struct *p);
 void PID_Angle_Update(void);
+void PID_Speed_Update(void);
+
 
 
 #endif

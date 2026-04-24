@@ -44,7 +44,7 @@ void Encoder_Init(void)
 
 
 /**
-  *函    数：转速计算
+  *函    数：转速(转/分钟)计算
   *参    数：无
   *返 回 值：无
   */
@@ -54,8 +54,8 @@ void Encoder_GetState(void)
 	int16_t Count_R = TIM_GetCounter(TIM3);
 	
 	/*编码电机旋转一圈触发44次脉冲，电机减速比9.6*/
-	RPM_L = (Count_L * 6000.0f) / (44.0f * 9.6f);
-	RPM_R = (Count_R * 6000.0f) / (44.0f * 9.6f);
+	RPM_L = (Count_L * 1200.0f) / (44.0f * 9.6f);
+	RPM_R = (Count_R * 1200.0f) / (44.0f * 9.6f);
 	
 	TIM_SetCounter(TIM3, 0);
 	TIM_SetCounter(TIM4, 0);	

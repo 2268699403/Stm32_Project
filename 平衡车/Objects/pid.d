@@ -32,3 +32,4 @@
 .\objects\pid.o: .\Hardware\MPU6050.h
 .\objects\pid.o: .\Hardware\MPU6050_Reg.h
 .\objects\pid.o: .\Hardware\Motor.h
+.\objects\pid.o: .\Hardware\Encoder.h

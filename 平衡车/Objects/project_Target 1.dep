@@ -849,7 +849,7 @@ F (.\Hardware\OLED_Data.c)(0x6714E9C1)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g 
 I (Hardware\OLED_Data.h)(0x6714E987)
 I (D:\keil 5\ARM\ARMCC\include\stdint.h)(0x588B8344)
 F (.\Hardware\OLED_Data.h)(0x6714E987)()
-F (.\Hardware\Timer.c)(0x69E62F85)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Library -I .\Start -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-I"D:\keil 5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include"-I"D:\keil 5\ARM\CMSIS\Include"-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\timer.o --omf_browse .\objects\timer.crf --depend .\objects\timer.d)
+F (.\Hardware\Timer.c)(0x69EAFC4D)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Library -I .\Start -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-I"D:\keil 5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include"-I"D:\keil 5\ARM\CMSIS\Include"-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\timer.o --omf_browse .\objects\timer.crf --depend .\objects\timer.d)
 I (.\Start\stm32f10x.h)(0x4D783CB4)
 I (.\Start\core_cm3.h)(0x4D523B58)
 I (D:\keil 5\ARM\ARMCC\include\stdint.h)(0x588B8344)
@@ -878,16 +878,16 @@ I (.\Library\stm32f10x_tim.h)(0x4D783BB4)
 I (.\Library\stm32f10x_usart.h)(0x4D783BB4)
 I (.\Library\stm32f10x_wwdg.h)(0x4D783BB4)
 I (.\Library\misc.h)(0x4D783BB4)
-I (Hardware\Timer.h)(0x69D8D82C)
+I (Hardware\Timer.h)(0x69E883D1)
 I (Hardware\Key.h)(0x69DB994F)
 I (Hardware\Encoder.h)(0x69E39A9B)
 I (Hardware\MPU6050.h)(0x69E49FA1)
 I (Hardware\MPU6050_Reg.h)(0x69DCFC63)
 I (Hardware\USART1.h)(0x69E4A3DD)
-I (.\User\PID.h)(0x69E5E3D1)
+I (.\User\PID.h)(0x69EAF264)
 I (Hardware\Motor.h)(0x69E5E1BC)
 I (Hardware\LED.h)(0x69CBBFC3)
-F (.\Hardware\Timer.h)(0x69D8D82C)()
+F (.\Hardware\Timer.h)(0x69E883D1)()
 F (.\Hardware\USART2.c)(0x69E4AC93)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Library -I .\Start -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-I"D:\keil 5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include"-I"D:\keil 5\ARM\CMSIS\Include"-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\usart2.o --omf_browse .\objects\usart2.crf --depend .\objects\usart2.d)
 I (.\Start\stm32f10x.h)(0x4D783CB4)
 I (.\Start\core_cm3.h)(0x4D523B58)
@@ -983,10 +983,10 @@ I (.\Library\stm32f10x_tim.h)(0x4D783BB4)
 I (.\Library\stm32f10x_usart.h)(0x4D783BB4)
 I (.\Library\stm32f10x_wwdg.h)(0x4D783BB4)
 I (.\Library\misc.h)(0x4D783BB4)
-I (Hardware\Timer.h)(0x69D8D82C)
+I (Hardware\Timer.h)(0x69E883D1)
 I (Hardware\Key.h)(0x69DB994F)
 F (.\Hardware\Key.h)(0x69DB994F)()
-F (.\Hardware\MPU6050.c)(0x69E641F6)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Library -I .\Start -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-I"D:\keil 5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include"-I"D:\keil 5\ARM\CMSIS\Include"-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\mpu6050.o --omf_browse .\objects\mpu6050.crf --depend .\objects\mpu6050.d)
+F (.\Hardware\MPU6050.c)(0x69E643E1)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Library -I .\Start -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-I"D:\keil 5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include"-I"D:\keil 5\ARM\CMSIS\Include"-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\mpu6050.o --omf_browse .\objects\mpu6050.crf --depend .\objects\mpu6050.d)
 I (.\Start\stm32f10x.h)(0x4D783CB4)
 I (.\Start\core_cm3.h)(0x4D523B58)
 I (D:\keil 5\ARM\ARMCC\include\stdint.h)(0x588B8344)
@@ -1021,7 +1021,7 @@ I (.\System\Delay.h)(0x6130920D)
 I (D:\keil 5\ARM\ARMCC\include\math.h)(0x588B8344)
 F (.\Hardware\MPU6050.h)(0x69E49FA1)()
 F (.\Hardware\MPU6050_Reg.h)(0x69DCFC63)()
-F (.\Hardware\Motor.c)(0x69E63B2C)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Library -I .\Start -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-I"D:\keil 5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include"-I"D:\keil 5\ARM\CMSIS\Include"-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\motor.o --omf_browse .\objects\motor.crf --depend .\objects\motor.d)
+F (.\Hardware\Motor.c)(0x69E79D64)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Library -I .\Start -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-I"D:\keil 5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include"-I"D:\keil 5\ARM\CMSIS\Include"-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\motor.o --omf_browse .\objects\motor.crf --depend .\objects\motor.d)
 I (.\Start\stm32f10x.h)(0x4D783CB4)
 I (.\Start\core_cm3.h)(0x4D523B58)
 I (D:\keil 5\ARM\ARMCC\include\stdint.h)(0x588B8344)
@@ -1083,7 +1083,7 @@ I (.\Library\stm32f10x_usart.h)(0x4D783BB4)
 I (.\Library\stm32f10x_wwdg.h)(0x4D783BB4)
 I (.\Library\misc.h)(0x4D783BB4)
 F (.\Hardware\PWM.h)(0x69E1E7FB)()
-F (.\Hardware\Encoder.c)(0x69E44214)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Library -I .\Start -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-I"D:\keil 5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include"-I"D:\keil 5\ARM\CMSIS\Include"-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\encoder.o --omf_browse .\objects\encoder.crf --depend .\objects\encoder.d)
+F (.\Hardware\Encoder.c)(0x69E9F1E7)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Library -I .\Start -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-I"D:\keil 5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include"-I"D:\keil 5\ARM\CMSIS\Include"-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\encoder.o --omf_browse .\objects\encoder.crf --depend .\objects\encoder.d)
 I (.\Start\stm32f10x.h)(0x4D783CB4)
 I (.\Start\core_cm3.h)(0x4D523B58)
 I (D:\keil 5\ARM\ARMCC\include\stdint.h)(0x588B8344)
@@ -1113,7 +1113,7 @@ I (.\Library\stm32f10x_usart.h)(0x4D783BB4)
 I (.\Library\stm32f10x_wwdg.h)(0x4D783BB4)
 I (.\Library\misc.h)(0x4D783BB4)
 F (.\Hardware\Encoder.h)(0x69E39A9B)()
-F (.\User\main.c)(0x69E63F1E)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Library -I .\Start -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-I"D:\keil 5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include"-I"D:\keil 5\ARM\CMSIS\Include"-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+F (.\User\main.c)(0x69EAF264)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Library -I .\Start -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-I"D:\keil 5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include"-I"D:\keil 5\ARM\CMSIS\Include"-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
 I (.\Start\stm32f10x.h)(0x4D783CB4)
 I (.\Start\core_cm3.h)(0x4D523B58)
 I (D:\keil 5\ARM\ARMCC\include\stdint.h)(0x588B8344)
@@ -1146,7 +1146,7 @@ I (.\System\Delay.h)(0x6130920D)
 I (.\Hardware\OLED.h)(0x6714E2A7)
 I (.\Hardware\OLED_Data.h)(0x6714E987)
 I (.\Hardware\LED.h)(0x69CBBFC3)
-I (.\Hardware\Timer.h)(0x69D8D82C)
+I (.\Hardware\Timer.h)(0x69E883D1)
 I (.\Hardware\USART1.h)(0x69E4A3DD)
 I (.\Hardware\USART2.h)(0x69E39D7F)
 I (.\Hardware\Key.h)(0x69DB994F)
@@ -1155,7 +1155,7 @@ I (.\Hardware\MPU6050_Reg.h)(0x69DCFC63)
 I (.\Hardware\Motor.h)(0x69E5E1BC)
 I (.\Hardware\PWM.h)(0x69E1E7FB)
 I (.\Hardware\Encoder.h)(0x69E39A9B)
-I (User\PID.h)(0x69E5E3D1)
+I (User\PID.h)(0x69EAF264)
 F (.\User\stm32f10x_conf.h)(0x4D99A59E)()
 F (.\User\stm32f10x_it.c)(0x4D99A59E)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Library -I .\Start -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-I"D:\keil 5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include"-I"D:\keil 5\ARM\CMSIS\Include"-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\stm32f10x_it.o --omf_browse .\objects\stm32f10x_it.crf --depend .\objects\stm32f10x_it.d)
 I (User\stm32f10x_it.h)(0x4D99A59E)
@@ -1188,7 +1188,7 @@ I (.\Library\stm32f10x_usart.h)(0x4D783BB4)
 I (.\Library\stm32f10x_wwdg.h)(0x4D783BB4)
 I (.\Library\misc.h)(0x4D783BB4)
 F (.\User\stm32f10x_it.h)(0x4D99A59E)()
-F (.\User\PID.c)(0x69E642AE)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Library -I .\Start -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-I"D:\keil 5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include"-I"D:\keil 5\ARM\CMSIS\Include"-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\pid.o --omf_browse .\objects\pid.crf --depend .\objects\pid.d)
+F (.\User\PID.c)(0x69EAF264)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Library -I .\Start -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-I"D:\keil 5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include"-I"D:\keil 5\ARM\CMSIS\Include"-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\pid.o --omf_browse .\objects\pid.crf --depend .\objects\pid.d)
 I (.\Start\stm32f10x.h)(0x4D783CB4)
 I (.\Start\core_cm3.h)(0x4D523B58)
 I (D:\keil 5\ARM\ARMCC\include\stdint.h)(0x588B8344)
@@ -1217,8 +1217,9 @@ I (.\Library\stm32f10x_tim.h)(0x4D783BB4)
 I (.\Library\stm32f10x_usart.h)(0x4D783BB4)
 I (.\Library\stm32f10x_wwdg.h)(0x4D783BB4)
 I (.\Library\misc.h)(0x4D783BB4)
-I (User\PID.h)(0x69E5E3D1)
+I (User\PID.h)(0x69EAF264)
 I (.\Hardware\MPU6050.h)(0x69E49FA1)
 I (.\Hardware\MPU6050_Reg.h)(0x69DCFC63)
 I (.\Hardware\Motor.h)(0x69E5E1BC)
-F (.\User\PID.h)(0x69E5E3D1)()
+I (.\Hardware\Encoder.h)(0x69E39A9B)
+F (.\User\PID.h)(0x69EAF264)()

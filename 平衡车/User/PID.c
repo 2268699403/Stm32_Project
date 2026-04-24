@@ -2,7 +2,9 @@
 #include "PID.h"
 #include "MPU6050.h"
 #include "Motor.h"
+#include "Encoder.h"
 
+/* 直立环结构体配置 */
 PID_struct PID_Angle = {
 	.Kp = 2.5,
 	.Ki = 0.07,
@@ -10,6 +12,18 @@ PID_struct PID_Angle = {
 	.OutMax = 100,
 	.OutMin = -100,
 };
+
+
+/* 速度环结构体配置 */
+PID_struct PID_Speed = {
+	.Kp = 0,
+	.Ki = 0,
+	.Kd = 0,
+	.OutMax = 20,
+	.OutMin = -20,
+};
+
+
 
 /**
   * 函    数：初始化结构体初值
@@ -60,12 +74,12 @@ void PID_Update(PID_struct *p)
 
 void PID_Angle_Update(void)
 {
-	int16_t PWM_L = 0,PWM_R = 0;
-	int16_t AvePWM = 0,DifPWM = 0;	
+	int16_t PWM_L  = 0, PWM_R = 0;
+	int16_t AvePWM = 0, DifPWM = 0;
 	
 	PID_Angle.Actual = Angle;
 	PID_Update(&PID_Angle);
-	AvePWM = -PID_Angle.Out;
+	AvePWM = -PID_Angle.Out;	
 	
 	PWM_L = AvePWM + DifPWM / 2;
 	PWM_R = AvePWM - DifPWM / 2;
@@ -78,3 +92,17 @@ void PID_Angle_Update(void)
 }
 
 
+void PID_Speed_Update(void)
+{
+	float Speed_L  = 0, Speed_R = 0;
+	float AveSpeed = 0, DifSpeed = 0;
+	
+	Speed_L = RPM_L;Speed_R = RPM_R;
+	AveSpeed = (Speed_L + Speed_R) / 2.0;
+	DifSpeed = Speed_L - Speed_R;
+	
+	PID_Speed.Actual = AveSpeed;
+	PID_Update(&PID_Speed);
+	PID_Angle.Target = PID_Speed.Out;
+	
+}

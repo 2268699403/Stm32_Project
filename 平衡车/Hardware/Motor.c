@@ -82,13 +82,13 @@ void Motor_Direction(uint8_t Motor_Id,int16_t Duty)
 		if(Duty < 5 && Duty > 1){Duty = 5;}
 		else if(Duty < -1 && Duty > -5){Duty = -5;}
 		
-		if(Duty > 1)			//正转
+		if(Duty > 0)			//正转
 		{
 			TIM2_SetPWM2_Duty(Duty);
 			GPIO_SetBits(GPIOB,GPIO_Pin_13);
 			GPIO_ResetBits(GPIOB,GPIO_Pin_12);
 		}
-		else if(Duty < -1)		//反转
+		else if(Duty < 0)		//反转
 		{
 			TIM2_SetPWM2_Duty(-Duty);
 			GPIO_SetBits(GPIOB,GPIO_Pin_12);

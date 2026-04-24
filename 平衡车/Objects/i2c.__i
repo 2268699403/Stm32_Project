@@ -1,6 +1,0 @@
---c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Library -I .\Start -I .\User -I .\System -I .\Hardware --no-multibyte-chars
--I.\RTE\_Target_1
--I"D:\keil 5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include"
--I"D:\keil 5\ARM\CMSIS\Include"
--D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER
--o .\objects\i2c.o --omf_browse .\objects\i2c.crf --depend .\objects\i2c.d "Hardware\I2C.c"

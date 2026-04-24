@@ -8,7 +8,8 @@
 #include "Motor.h"
 #include "LED.h"
 
-uint8_t config = 0;
+uint8_t En = 0;
+
 /**
   * 函    数：TIM1定时器初始化
   * 参    数：无
@@ -67,14 +68,14 @@ void TIM1_UP_IRQHandler(void)
     {
 		static int count_1 = 0;
 		static int count_2 = 0;
+		static int count_3 = 0;
 		count_1++;
 		count_2++;
+		count_3++;
 				
 		if(count_1 >=10)
 		{	
-			if(Key1_Mode == 1)
-			{config = !config;Key1_Mode = 0;}
-			if(config == 1)
+			if(En == 1)
 			{
 				LED_ON();
 				if(Angle <= -50 | Angle >= +50)
@@ -84,7 +85,7 @@ void TIM1_UP_IRQHandler(void)
 				}
 				else
 				{
-					PID_Angle_Update();				//直立环PID调节
+					PID_Angle_Update();				//直立环PID调控
 				}
 			}
 			else
@@ -94,7 +95,6 @@ void TIM1_UP_IRQHandler(void)
 
 
 			MPU6050_GetRawData(&Data);		//读取MPU6050状态
-			Encoder_GetState();				//读取编码电机转速
 			count_1 = 0;
 		}
 					
@@ -103,6 +103,16 @@ void TIM1_UP_IRQHandler(void)
 			Key_Scan();						//读取按键状态
 			Key_Mode();						//判断触发模式
 			count_2 = 0;
+		}
+		
+		if(count_3 >=50)
+		{
+			Encoder_GetState();				//读取编码电机转速
+	
+			if(En == 1)
+			{PID_Speed_Update();}				//速度环PID调控
+			
+			count_3 = 0;
 		}
 							
         /* 清除中断标志 */

@@ -22,33 +22,39 @@ int main(void)
 	USART2_Init();
 	MPU6050_Init();
 	MPU6050_Config();	
+	Encoder_Init();
 	Key_Init();
 	LED_Init();
 	PWM_Init();
 	
+	PID_Init(&PID_Angle);
+	PID_Init(&PID_Speed);	
+		
+	Key1_Mode = 0;
+	
 	while(1)
 	{
+		if(Key1_Mode == 1)
+		{En = 1;Key1_Mode = 0;}
+		if(Key2_Mode == 1)
+		{PID_Speed.Kp += 0.001;Key2_Mode = 0;}
+		if(Key3_Mode == 1)
+		{PID_Speed.Ki += 0.0001;Key3_Mode = 0;}
+		if(Key4_Mode == 1)
+		{PID_Speed.Kd += 0.001;Key4_Mode = 0;}
 		
-		if(Key2_Mode == 1){PID_Angle.Kp += 0.1;Key2_Mode = 0;}
-		else if(Key2_Mode == 2){PID_Angle.Kp -= 0.1;Key2_Mode = 0;}
 		
-		if(Key3_Mode == 1){PID_Angle.Ki += 0.01;Key3_Mode = 0;}
-		else if(Key3_Mode == 2){PID_Angle.Ki -= 0.1;Key3_Mode = 0;}
+		OLED_ShowFloatNum(0,0,PID_Angle.Actual,2,2,OLED_8X16);
+		OLED_ShowFloatNum(70,0,PID_Angle.Target,2,2,OLED_8X16);
 		
-		if(Key4_Mode == 1){PID_Angle.Kd += 0.1;Key4_Mode = 0;}
-		else if(Key4_Mode == 2){PID_Angle.Kd -= 0.1;Key4_Mode = 0;}
+		OLED_ShowFloatNum(0,16,PID_Speed.Kp,1,4,OLED_8X16);
+		OLED_ShowFloatNum(0,32,PID_Speed.Ki,1,4,OLED_8X16);
+		OLED_ShowFloatNum(0,48,PID_Speed.Kd,1,4,OLED_8X16);
 		
-		
-		OLED_ShowFloatNum(0,0,Angle,3,3,OLED_8X16);
-		
-		OLED_ShowFloatNum(0,16,PID_Angle.Kp,2,2,OLED_8X16);
-		OLED_ShowFloatNum(0,32,PID_Angle.Ki,2,2,OLED_8X16);
-		OLED_ShowFloatNum(0,48,PID_Angle.Kd,2,2,OLED_8X16);
-		
-		OLED_ShowSignedNum(60,16,PID_Angle.Target,5,OLED_8X16);
-		OLED_ShowSignedNum(60,32,PID_Angle.Actual,5,OLED_8X16);
-		OLED_ShowSignedNum(60,48,PID_Angle.Out,5,OLED_8X16);		
-		USART2_Printf("%.f,%.f,%.f\r\n",PID_Angle.Target,PID_Angle.Actual,PID_Angle.Out);
+		OLED_ShowSignedNum(70,16,PID_Speed.Target,5,OLED_8X16);
+		OLED_ShowSignedNum(70,32,PID_Speed.Actual,5,OLED_8X16);
+		OLED_ShowSignedNum(70,48,PID_Speed.Out,5,OLED_8X16);		
+		USART2_Printf("%.f,%.f,%.f\r\n",PID_Speed.Target,PID_Speed.Actual,PID_Speed.Out);
 		OLED_Update();
 	}
 }
