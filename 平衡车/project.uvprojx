@@ -780,6 +780,21 @@
               <FileType>5</FileType>
               <FilePath>.\Hardware\Encoder.h</FilePath>
             </File>
+            <File>
+              <FileName>NRF24L01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\NRF24L01.c</FilePath>
+            </File>
+            <File>
+              <FileName>NRF24L01.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\NRF24L01.h</FilePath>
+            </File>
+            <File>
+              <FileName>NRF24L01_Define.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\NRF24L01_Define.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -37,6 +37,7 @@
 ".\objects\motor.o"
 ".\objects\pwm.o"
 ".\objects\encoder.o"
+".\objects\nrf24l01.o"
 ".\objects\main.o"
 ".\objects\stm32f10x_it.o"
 ".\objects\pid.o"

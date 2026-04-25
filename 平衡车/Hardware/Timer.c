@@ -88,10 +88,13 @@ void TIM1_UP_IRQHandler(void)
 				En = 0;  // 强制禁用运行
 				LED_OFF();
 				Motor_Stop();
-				/* 清零PID积分项，防止残留值影响下次启动 */
+				/* 清零PID积分项和目标值，防止残留值影响下次启动 */
 				PID_Angle.ErrorInt = 0;
+				PID_Angle.Target = 0;
 				PID_Speed.ErrorInt = 0;
-				PID_Angle.Target = 0;  // 同时清零目标值
+				PID_Speed.Target = 0;
+				PID_Turn.ErrorInt = 0;
+				PID_Turn.Target = 0;
 			}
 			else if(En == 1)
 			{
@@ -101,6 +104,14 @@ void TIM1_UP_IRQHandler(void)
 			else
 			{
 				LED_OFF();
+				Motor_Stop();
+				/* 清零PID积分项和目标值 */
+				PID_Angle.ErrorInt = 0;
+				PID_Angle.Target = 0;
+				PID_Speed.ErrorInt = 0;
+				PID_Speed.Target = 0;
+				PID_Turn.ErrorInt = 0;
+				PID_Turn.Target = 0;
 			}
 			count_1 = 0;
 		}
@@ -117,7 +128,7 @@ void TIM1_UP_IRQHandler(void)
 			Encoder_GetState();				//读取编码电机转速
 	
 			if(En == 1)
-			{PID_Speed_Update();}				//速度环PID调控
+			{PID_Move_Update();}				//移动环PID调控
 			
 			count_3 = 0;
 		}

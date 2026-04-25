@@ -42,3 +42,5 @@
 .\objects\main.o: .\Hardware\PWM.h
 .\objects\main.o: .\Hardware\Encoder.h
 .\objects\main.o: User\PID.h
+.\objects\main.o: .\Hardware\NRF24L01.h
+.\objects\main.o: .\Hardware\NRF24L01_Define.h
