@@ -4,6 +4,7 @@
 #include "Motor.h"
 #include "Encoder.h"
 
+
 /* 直立环结构体配置 */
 PID_struct PID_Angle = {
 	.Kp = 2.5,
@@ -17,7 +18,7 @@ PID_struct PID_Angle = {
 /* 速度环结构体配置 */
 PID_struct PID_Speed = {
 	.Kp = 0.065,
-	.Ki = 0,
+	.Ki = 0.003,
 	.Kd = 0,
 	.OutMax = 20,
 	.OutMin = -20,
@@ -26,7 +27,7 @@ PID_struct PID_Speed = {
 
 /* 转向环结构体配置 */
 PID_struct PID_Turn = {
-	.Kp = 0.1,
+	.Kp = 0.02,
 	.Ki = 0,
 	.Kd = 0,
 	.OutMax = 50,
@@ -95,7 +96,7 @@ void PID_Angle_Update(void)
 	PID_Angle.Actual = Angle;
 	PID_Update(&PID_Angle);
 	AvePWM = -PID_Angle.Out;	
-	DifPWM = PID_Turn.Out;		// 使用转向环输出
+	DifPWM = PID_Turn.Out;				//使用转向环输出
 	
 	PWM_L = AvePWM + DifPWM / 2;
 	PWM_R = AvePWM - DifPWM / 2;

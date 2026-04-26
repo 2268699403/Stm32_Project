@@ -34,7 +34,7 @@ int main(void)
 	PID_Init(&PID_Speed);	
 	PID_Init(&PID_Turn);	
 	Key1_Mode = 0;
-	
+		
 	while(1)
 	{
 		if(Key1_Mode == 1)
@@ -62,7 +62,7 @@ int main(void)
 //				int8_t RH = NRF24L01_RxPacket[3];
 				int8_t RV = NRF24L01_RxPacket[4];
 				
-				PID_Speed.Target = LH;
+				PID_Speed.Target = LH * 2;
 				PID_Turn.Target  = -(RV * 10);	
 			}			
 		}
@@ -74,10 +74,10 @@ int main(void)
 		OLED_ShowFloatNum(0,32,PID_Turn.Ki,1,3,OLED_8X16);
 		OLED_ShowFloatNum(0,48,PID_Turn.Kd,1,3,OLED_8X16);
 		
-		OLED_ShowSignedNum( 0,0,PID_Speed.Target,5,OLED_8X16);
-		OLED_ShowSignedNum(60,0,PID_Turn.Target,5,OLED_8X16);
+		OLED_ShowSignedNum( 0,0,PID_Turn.Target,5,OLED_8X16);
+		OLED_ShowSignedNum(60,0,PID_Turn.Out,5,OLED_8X16);
 //		OLED_ShowSignedNum(70,32,PID_Turn.Out,5,OLED_8X16);		
-		USART2_Printf("%.f,%.f,%.f\r\n",PID_Speed.Target,PID_Speed.Actual,PID_Speed.Out);
+		USART2_Printf("%.f,%.f,%.f\r\n",PID_Turn.Target,PID_Turn.Actual,PID_Turn.Out);
 		OLED_Update();
 	}
 }
