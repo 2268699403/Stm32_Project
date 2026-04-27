@@ -4,6 +4,10 @@
 #include "Motor.h"
 #include "Encoder.h"
 
+float AveSpeed = 0, DifSpeed = 0;
+int16_t PWM_L  = 0, PWM_R = 0;
+int16_t AvePWM = 0, DifPWM = 0;
+
 
 /* 直立环结构体配置 */
 PID_struct PID_Angle = {
@@ -30,8 +34,8 @@ PID_struct PID_Turn = {
 	.Kp = 0.02,
 	.Ki = 0,
 	.Kd = 0,
-	.OutMax = 50,
-	.OutMin = -50,
+	.OutMax = 30,
+	.OutMin = -30,
 };
 
 
@@ -88,15 +92,13 @@ void PID_Update(PID_struct *p)
   * 参    数：无
   * 返 回 值：无
   */
+
 void PID_Angle_Update(void)
 {
-	int16_t PWM_L  = 0, PWM_R = 0;
-	int16_t AvePWM = 0, DifPWM = 0;
 	
 	PID_Angle.Actual = Angle;
 	PID_Update(&PID_Angle);
 	AvePWM = -PID_Angle.Out;	
-	DifPWM = PID_Turn.Out;				//使用转向环输出
 	
 	PWM_L = AvePWM + DifPWM / 2;
 	PWM_R = AvePWM - DifPWM / 2;
@@ -116,12 +118,9 @@ void PID_Angle_Update(void)
   */
 void PID_Move_Update(void)
 {
-	float Speed_L  = 0, Speed_R = 0;
-	float AveSpeed = 0, DifSpeed = 0;
 	
-	Speed_L = RPM_L;Speed_R = RPM_R;
-	AveSpeed = (Speed_L + Speed_R) / 2.0;
-	DifSpeed = Speed_L - Speed_R;
+	AveSpeed = (RPM_L + RPM_R) / 2.0;
+	DifSpeed = RPM_L - RPM_R;
 	
 	/* 速度环PID调控 */
 	PID_Speed.Actual = AveSpeed;
@@ -131,4 +130,6 @@ void PID_Move_Update(void)
 	/* 转向环PID调控 */
 	PID_Turn.Actual = DifSpeed;
 	PID_Update(&PID_Turn);
+	DifPWM = PID_Turn.Out;				//使用转向环输出
+
 }

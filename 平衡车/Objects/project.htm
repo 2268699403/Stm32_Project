@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Sun Apr 26 17:21:24 2026
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Mon Apr 27 18:35:11 2026
 <BR><P>
 <H3>Maximum Stack Usage =        320 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -403,6 +403,7 @@ Global Symbols
 
 <P><STRONG><a name="[ba]"></a>__aeabi_f2iz</STRONG> (Thumb, 50 bytes, Stack size 0 bytes, ffixi.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_Move_Update
 <LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_Angle_Update
 </UL>
 
@@ -883,7 +884,7 @@ Global Symbols
 <P><STRONG><a name="[3]"></a>MemManage_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f10x_it.o(i.MemManage_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_md.o(RESET)
 </UL>
-<P><STRONG><a name="[8a]"></a>Motor_Direction</STRONG> (Thumb, 248 bytes, Stack size 16 bytes, motor.o(i.Motor_Direction))
+<P><STRONG><a name="[8a]"></a>Motor_Direction</STRONG> (Thumb, 250 bytes, Stack size 16 bytes, motor.o(i.Motor_Direction))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = Motor_Direction &rArr; TIM2_SetPWM2_Duty
 </UL>
 <BR>[Calls]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetBits
@@ -1296,8 +1297,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OLED_Update
 </UL>
 
-<P><STRONG><a name="[b8]"></a>PID_Angle_Update</STRONG> (Thumb, 130 bytes, Stack size 24 bytes, pid.o(i.PID_Angle_Update))
-<BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = PID_Angle_Update &rArr; PID_Update &rArr; __aeabi_fsub &rArr; __aeabi_fadd &rArr; _float_epilogue
+<P><STRONG><a name="[b8]"></a>PID_Angle_Update</STRONG> (Thumb, 186 bytes, Stack size 8 bytes, pid.o(i.PID_Angle_Update))
+<BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = PID_Angle_Update &rArr; PID_Update &rArr; __aeabi_fsub &rArr; __aeabi_fadd &rArr; _float_epilogue
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2iz
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_Direction
@@ -1310,10 +1311,11 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[bb]"></a>PID_Move_Update</STRONG> (Thumb, 98 bytes, Stack size 40 bytes, pid.o(i.PID_Move_Update))
-<BR><BR>[Stack]<UL><LI>Max Depth = 84<LI>Call Chain = PID_Move_Update &rArr; PID_Update &rArr; __aeabi_fsub &rArr; __aeabi_fadd &rArr; _float_epilogue
+<P><STRONG><a name="[bb]"></a>PID_Move_Update</STRONG> (Thumb, 114 bytes, Stack size 24 bytes, pid.o(i.PID_Move_Update))
+<BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = PID_Move_Update &rArr; PID_Update &rArr; __aeabi_fsub &rArr; __aeabi_fadd &rArr; _float_epilogue
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fsub
+<BR>[Calls]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2iz
+<LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fsub
 <LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
 <LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fadd
 <LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ddiv

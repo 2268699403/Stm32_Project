@@ -57,12 +57,12 @@ int main(void)
 			
 			if (ID == 0x00)
 			{
-				int8_t LH = NRF24L01_RxPacket[1];
+//				int8_t LH = NRF24L01_RxPacket[1];
 //				int8_t LV = NRF24L01_RxPacket[2];
-//				int8_t RH = NRF24L01_RxPacket[3];
+				int8_t RH = NRF24L01_RxPacket[3];
 				int8_t RV = NRF24L01_RxPacket[4];
 				
-				PID_Speed.Target = LH * 2;
+				PID_Speed.Target = RH;
 				PID_Turn.Target  = -(RV * 10);	
 			}			
 		}
