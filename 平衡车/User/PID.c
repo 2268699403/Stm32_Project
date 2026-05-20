@@ -34,8 +34,8 @@ PID_struct PID_Turn = {
 	.Kp = 0.02,
 	.Ki = 0,
 	.Kd = 0,
-	.OutMax = 30,
-	.OutMin = -30,
+	.OutMax = 50,
+	.OutMin = -50,
 };
 
 

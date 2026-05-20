@@ -54,20 +54,18 @@ void Motor_Direction(uint8_t Motor_Id,int16_t Duty)
 	/*判断左电机*/
 	 if(Motor_Id == Motor_L)
 	{
-		if(Duty < 5 && Duty > 1){Duty = 5;}
-		else if(Duty < -1 && Duty > -5){Duty = -5;}
 		
-		if(Duty > 1)			//正转
+		if(Duty > 0)			//正转
 		{
-			TIM2_SetPWM1_Duty(Duty);			
 			GPIO_SetBits(GPIOB,GPIO_Pin_14);
 			GPIO_ResetBits(GPIOB,GPIO_Pin_15);					
+			TIM2_SetPWM2_Duty(Duty);			
 		}
-		else if(Duty < -1)		//反转
+		else if(Duty < 0)		//反转
 		{
-			TIM2_SetPWM1_Duty(-Duty);
 			GPIO_SetBits(GPIOB,GPIO_Pin_15);
 			GPIO_ResetBits(GPIOB,GPIO_Pin_14);					
+			TIM2_SetPWM2_Duty(-Duty);
 		}
 		else					//停转
 		{
@@ -79,20 +77,18 @@ void Motor_Direction(uint8_t Motor_Id,int16_t Duty)
 	/*判断右电机*/
 	else if(Motor_Id == Motor_R)
 	{	
-		if(Duty < 5 && Duty > 1){Duty = 5;}
-		else if(Duty < -1 && Duty > -5){Duty = -5;}
 		
-		if(Duty > 1)			//正转
+		if(Duty > 0)			//正转
 		{
-			TIM2_SetPWM2_Duty(Duty);
 			GPIO_SetBits(GPIOB,GPIO_Pin_13);
 			GPIO_ResetBits(GPIOB,GPIO_Pin_12);
+			TIM2_SetPWM1_Duty(Duty);
 		}
-		else if(Duty < -1)		//反转
+		else if(Duty < 0)		//反转
 		{
-			TIM2_SetPWM2_Duty(-Duty);
 			GPIO_SetBits(GPIOB,GPIO_Pin_12);
 			GPIO_ResetBits(GPIOB,GPIO_Pin_13);
+			TIM2_SetPWM1_Duty(-Duty);
 		}
 		else					//停转
 		{

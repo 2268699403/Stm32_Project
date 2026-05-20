@@ -29,5 +29,9 @@ void PID_Update(PID_struct *p);
 void PID_Angle_Update(void);
 void PID_Move_Update(void);
 
+extern float AveSpeed,DifSpeed;
+extern int16_t PWM_L,PWM_R;
+extern int16_t AvePWM,DifPWM;
+
 
 #endif

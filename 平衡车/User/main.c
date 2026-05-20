@@ -34,9 +34,11 @@ int main(void)
 	PID_Init(&PID_Speed);	
 	PID_Init(&PID_Turn);	
 	Key1_Mode = 0;
-		
+	
+	
 	while(1)
 	{
+
 		if(Key1_Mode == 1)
 		{
 			En = !En;
@@ -44,9 +46,9 @@ int main(void)
 		}
 				
 		/* 蓝牙串口数据解析 */
-		USART2_ParseParam("Kp", &PID_Turn.Kp);
-		USART2_ParseParam("Ki", &PID_Turn.Ki);
-		USART2_ParseParam("Kd", &PID_Turn.Kd);	
+		USART2_ParseParam("Kp", &PID_Angle.Kp);
+		USART2_ParseParam("Ki", &PID_Angle.Ki);
+		USART2_ParseParam("Kd", &PID_Angle.Kd);	
 		USART2_ParseParam("speed",&PID_Speed.Target);
 		USART2_ParseParam("Turn",&PID_Turn.Target);
 		
@@ -57,27 +59,26 @@ int main(void)
 			
 			if (ID == 0x00)
 			{
-//				int8_t LH = NRF24L01_RxPacket[1];
+				int8_t LH = NRF24L01_RxPacket[1];
 //				int8_t LV = NRF24L01_RxPacket[2];
-				int8_t RH = NRF24L01_RxPacket[3];
+//				int8_t RH = NRF24L01_RxPacket[3];
 				int8_t RV = NRF24L01_RxPacket[4];
 				
-				PID_Speed.Target = RH;
-				PID_Turn.Target  = -(RV * 10);	
+				PID_Speed.Target = LH;
+				PID_Turn.Target  = (RV * 10);	
 			}			
 		}
 
 		
 		
 //		
-		OLED_ShowFloatNum(0,16,PID_Turn.Kp,1,3,OLED_8X16);
-		OLED_ShowFloatNum(0,32,PID_Turn.Ki,1,3,OLED_8X16);
-		OLED_ShowFloatNum(0,48,PID_Turn.Kd,1,3,OLED_8X16);
+		OLED_ShowFloatNum(0,16,PID_Angle.Kp,1,3,OLED_8X16);
+		OLED_ShowFloatNum(0,32,PID_Angle.Ki,1,3,OLED_8X16);
+		OLED_ShowFloatNum(0,48,PID_Angle.Kd,1,3,OLED_8X16);
 		
-		OLED_ShowSignedNum( 0,0,PID_Turn.Target,5,OLED_8X16);
-		OLED_ShowSignedNum(60,0,PID_Turn.Out,5,OLED_8X16);
-//		OLED_ShowSignedNum(70,32,PID_Turn.Out,5,OLED_8X16);		
-		USART2_Printf("%.f,%.f,%.f\r\n",PID_Turn.Target,PID_Turn.Actual,PID_Turn.Out);
+		OLED_ShowSignedNum( 0,0,PID_Angle.Actual,5,OLED_8X16);
+		OLED_ShowSignedNum(60,0,PID_Speed.Actual,5,OLED_8X16);
+//		USART2_Printf("%.f,%.f,%.f\r\n",PID_Turn.Target,PID_Turn.Actual,PID_Turn.Out);
 		OLED_Update();
 	}
 }
