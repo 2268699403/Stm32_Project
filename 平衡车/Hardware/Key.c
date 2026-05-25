@@ -30,6 +30,12 @@ uint8_t count2 = 0;
 uint8_t count3 = 0;
 uint8_t count4 = 0;
 
+/*长按已触发标志*/
+uint8_t Key1_LongTriggered = 0;
+uint8_t Key2_LongTriggered = 0;
+uint8_t Key3_LongTriggered = 0;
+uint8_t Key4_LongTriggered = 0;
+
 
 /**
   *函    数：初始化按键GPIO配置
@@ -141,64 +147,96 @@ void Key_Mode(void)
 	if(Pressed1 && !Key1_Mode && count1 >= 50)		//长按判断
 	{
 		Key1_Mode = 2;
+		Key1_LongTriggered = 1;
 		count1	  = 0;
 		Pressed1  = 0;
 		Released1 = 0;
 	}
-	if(Released1 && !Key1_Mode && count1 < 50)		//短按判断
+	if(Released1 && !Key1_Mode && !Key1_LongTriggered && count1 < 50)		//短按判断(排除长按后松手)
 	{
 		    Key1_Mode = 1;  
 			count1	  = 0;
 			Pressed1  = 0;
 			Released1 = 0;
 	}
+	if(Released1 && Key1_LongTriggered)		//长按后的释放，仅清除标志不触发
+	{
+		Key1_LongTriggered = 0;
+		count1	  = 0;
+		Pressed1  = 0;
+		Released1 = 0;
+	}
 	
 	/*判断Key2触发模式*/
 	if(Pressed2 && !Key2_Mode && count2 >= 50)		//长按判断
 	{
 		Key2_Mode = 2;
+		Key2_LongTriggered = 1;
 		count2	  = 0;
 		Pressed2  = 0;
 		Released2 = 0;
 	}
-	if(Released2 && !Key2_Mode && count2 < 50)		//短按判断
+	if(Released2 && !Key2_Mode && !Key2_LongTriggered && count2 < 50)		//短按判断(排除长按后松手)
 	{
 		    Key2_Mode = 1;  
 			count2	  = 0;
 			Pressed2  = 0;
 			Released2 = 0;
 	}
+	if(Released2 && Key2_LongTriggered)		//长按后的释放，仅清除标志不触发
+	{
+		Key2_LongTriggered = 0;
+		count2	  = 0;
+		Pressed2  = 0;
+		Released2 = 0;
+	}
 	
 	/*判断Key3触发模式*/
 	if(Pressed3 && !Key3_Mode && count3 >= 50)		//长按判断
 	{
 		Key3_Mode = 2;
+		Key3_LongTriggered = 1;
 		count3	  = 0;
 		Pressed3  = 0;
 		Released3 = 0;
 	}
-	if(Released3 && !Key3_Mode && count3 < 50)		//短按判断
+	if(Released3 && !Key3_Mode && !Key3_LongTriggered && count3 < 50)		//短按判断(排除长按后松手)
 	{
 		    Key3_Mode = 1;  
 			count3	  = 0;
 			Pressed3  = 0;
 			Released3 = 0;
 	}
+	if(Released3 && Key3_LongTriggered)		//长按后的释放，仅清除标志不触发
+	{
+		Key3_LongTriggered = 0;
+		count3	  = 0;
+		Pressed3  = 0;
+		Released3 = 0;
+	}
 	
 	/*判断Key4触发模式*/
 	if(Pressed4 && !Key4_Mode && count4 >= 50)		//长按判断
 	{
 		Key4_Mode = 2;
+		Key4_LongTriggered = 1;
 		count4	  = 0;
 		Pressed4  = 0;
 		Released4 = 0;
 	}
-	if(Released4 && !Key4_Mode && count4 < 50)		//短按判断
+	if(Released4 && !Key4_Mode && !Key4_LongTriggered && count4 < 50)		//短按判断(排除长按后松手)
 	{
 		    Key4_Mode = 1;  
 			count4	  = 0;
 			Pressed4  = 0;
 			Released4 = 0;
+	}
+	if(Released4 && Key4_LongTriggered)		//长按后的释放，仅清除标志不触发
+	{
+		Key4_LongTriggered = 0;
+		count4	  = 0;
+		Pressed4  = 0;
+		Released4 = 0;
 	}
 	
 	

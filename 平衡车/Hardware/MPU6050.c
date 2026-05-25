@@ -259,7 +259,7 @@ uint8_t MPU6050_GetRawData(MPU6050_Data *pData)
 	  */ 
 	AngleAcc  = atan2(pData->Accel_X,pData->Accel_Z) * 180.f / 3.14159f;
 	/*加速度计归零校准*/
-	AngleAcc -= 0.5;
+	AngleAcc -= 1.5;
   
 	/** 
 	  * 陀螺仪俯仰角计算

@@ -11,9 +11,9 @@ int16_t AvePWM = 0, DifPWM = 0;
 
 /* 直立环结构体配置 */
 PID_struct PID_Angle = {
-	.Kp = 2.5,
-	.Ki = 0.07,
-	.Kd = 3,
+	.Kp = 3.5,
+	.Ki = 0.3,
+	.Kd = 6.5,
 	.OutMax = 100,
 	.OutMin = -100,
 };
@@ -31,7 +31,7 @@ PID_struct PID_Speed = {
 
 /* 转向环结构体配置 */
 PID_struct PID_Turn = {
-	.Kp = 0.02,
+	.Kp = 0.05,
 	.Ki = 0,
 	.Kd = 0,
 	.OutMax = 50,
@@ -95,17 +95,22 @@ void PID_Update(PID_struct *p)
 
 void PID_Angle_Update(void)
 {
-	
+	/* 获取MPU6050解算的当前角度作为实际值 */
 	PID_Angle.Actual = Angle;
+	/* 执行直立环PID运算，输出控制量 */
 	PID_Update(&PID_Angle);
+	/* 取反输出：当平衡车前倾时，需要输出的PWM趋势应为前进方向，与PID输出符号相反 */
 	AvePWM = -PID_Angle.Out;	
 	
+	/* 电机差速混合：左电机 = 直立平均PWM - 转向差速/2，右电机 = 直立平均PWM + 转向差速/2 */
 	PWM_L = AvePWM + DifPWM / 2;
 	PWM_R = AvePWM - DifPWM / 2;
 	
+	/* PWM输出限幅保护，防止占空比超过100%导致电机异常 */
 	if(PWM_L > 100){PWM_L = 100;} else if(PWM_L < -100){PWM_L = -100;}
 	if(PWM_R > 100){PWM_R = 100;} else if(PWM_R < -100){PWM_R = -100;}
 	
+	/* 输出PWM控制电机旋转方向和速度 */
 	Motor_Direction(Motor_L,PWM_L);
 	Motor_Direction(Motor_R,PWM_R);
 }
@@ -130,6 +135,6 @@ void PID_Move_Update(void)
 	/* 转向环PID调控 */
 	PID_Turn.Actual = DifSpeed;
 	PID_Update(&PID_Turn);
-	DifPWM = PID_Turn.Out;				//使用转向环输出
+	DifPWM = PID_Turn.Out;
 
 }

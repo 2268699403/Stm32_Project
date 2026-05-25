@@ -11,6 +11,11 @@ extern uint8_t Key2_Mode;
 extern uint8_t Key3_Mode;
 extern uint8_t Key4_Mode;
 
+extern uint8_t Key1_LongTriggered;
+extern uint8_t Key2_LongTriggered;
+extern uint8_t Key3_LongTriggered;
+extern uint8_t Key4_LongTriggered;
+
 void Key_Init(void);
 void Key_Scan(void);
 void Key_Mode(void);

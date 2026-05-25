@@ -1,9 +1,11 @@
 #include "stm32f10x.h"  
 
 /**
-  * 函    数 初始化PWM配置
-  * 参    数 无
-  * 返 回 值 无
+  * 函    数：初始化PWM配置
+  * 参    数：无
+  * 返 回 值：无
+  * 功能说明：配置TIM2为PWM输出模式，使用PA0(OC1)和PA1(OC2)作为PWM输出引脚
+  *           设置PWM频率为10kHz(72MHz/1/7200)，初始占空比为0
   */
 void PWM_Init(void)
 {
@@ -42,9 +44,10 @@ void PWM_Init(void)
 }
 
 /**
-  * 函    数 设置TIM2通道1的PWM占空比
-  * 参    数 duty: 占空比 (0~100)
-  * 返 回 值 无
+  * 函    数：设置TIM2通道1的PWM占空比
+  * 参    数：duty 占空比 (0~100)
+  * 返 回 值：无
+  * 功能说明：根据传入的占空比百分比计算CCR比较值，设置TIM2_CH1(PA0)输出对应的PWM波形
   */
 void TIM2_SetPWM1_Duty(uint8_t duty)
 {
@@ -53,9 +56,10 @@ void TIM2_SetPWM1_Duty(uint8_t duty)
 }	
 
 /**
-  * 函    数 设置TIM2通道2的PWM占空比
-  * 参    数 duty: 占空比 (0~100)
-  * 返 回 值 无
+  * 函    数：设置TIM2通道2的PWM占空比
+  * 参    数：duty 占空比 (0~100)
+  * 返 回 值：无
+  * 功能说明：根据传入的占空比百分比计算CCR比较值，设置TIM2_CH2(PA1)输出对应的PWM波形
   */
 void TIM2_SetPWM2_Duty(uint8_t duty)
 {

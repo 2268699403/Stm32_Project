@@ -52,7 +52,14 @@ void Encoder_GetState(void)
 	int16_t Count_L = TIM_GetCounter(TIM4);
 	int16_t Count_R = TIM_GetCounter(TIM3);
 	
-	/*编码电机旋转一圈触发44次脉冲，电机减速比9.6*/
+	/**
+	  * RPM计算说明：
+	  * Count为10ms采样周期内的编码器脉冲数
+	  * 电机旋转一圈产生44个脉冲（编码器线数）
+	  * 减速比为9.6:1，即电机轴转9.6圈输出轴转1圈
+	  * 1200 = 60s/min ÷ 0.01s(采样周期) × (1/减速比修正)的简化系数
+	  * 最终公式：RPM = (Count × 1200) / (44 × 9.6)
+	  */
 	RPM_L = (Count_L * 1200.0f) / (44.0f * 9.6f);
 	RPM_R = (Count_R * 1200.0f) / (44.0f * 9.6f);
 	
