@@ -1,0 +1,7 @@
+*** Using Compiler 'V5.06 update 5 (build 528)', folder: 'D:\keil 5\ARM\ARMCC\Bin'
+Build target 'Target 1'
+compiling MPU6050.c...
+linking...
+Program Size: Code=10036 RO-data=428 RW-data=264 ZI-data=2392  
+".\Objects\project.axf" - 0 Error(s), 0 Warning(s).
+Build Time Elapsed:  00:00:01

@@ -1,0 +1,19 @@
+{
+  "project": "D:\\Git\\Library\\Stm32_Project\\基于stm32f103的两轮自平衡车\\平衡车_FreeRTOS\\project.uvprojx",
+  "target": "Target 1",
+  "target_mcu": "STM32F103C8",
+  "toolchain": "ARMCC",
+  "artifact_path": "D:\\Git\\Library\\Stm32_Project\\基于stm32f103的两轮自平衡车\\平衡车_FreeRTOS\\Objects\\project.axf",
+  "artifact_kind": "elf",
+  "last_build": {
+    "status": "ok",
+    "action": "build",
+    "timestamp": "2026-07-06T09:07:35.828Z",
+    "target": "Target 1"
+  },
+  "last_flash": {
+    "status": "ok",
+    "timestamp": "2026-07-02T07:42:12.276Z",
+    "target": "Target 1"
+  }
+}

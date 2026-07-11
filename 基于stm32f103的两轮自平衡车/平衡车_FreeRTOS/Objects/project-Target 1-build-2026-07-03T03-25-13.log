@@ -1,0 +1,9 @@
+*** Using Compiler 'V5.06 update 5 (build 528)', folder: 'D:\keil 5\ARM\ARMCC\Bin'
+Build target 'Target 1'
+compiling MPU6050.c...
+Hardware\MPU6050.c(4): error:  #5: cannot open source input file "Delay.h": No such file or directory
+  #include "Delay.h"
+Hardware\MPU6050.c: 0 warnings, 1 error
+".\Objects\project.axf" - 1 Error(s), 0 Warning(s).
+Target not created.
+Build Time Elapsed:  00:00:01
