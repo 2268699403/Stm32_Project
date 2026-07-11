@@ -31,7 +31,7 @@ PID_struct PID_Speed = {
 
 /* 转向环结构体配置 */
 PID_struct PID_Turn = {
-	.Kp = 0.05,
+	.Kp = 0.5,
 	.Ki = 0,
 	.Kd = 0,
 	.OutMax = 50,

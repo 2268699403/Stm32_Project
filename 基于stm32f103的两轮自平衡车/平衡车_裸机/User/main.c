@@ -76,7 +76,7 @@ int main(void)
 				int8_t RV = NRF24L01_RxPacket[4];
 				
 				PID_Speed.Target = LH * 2;		// 左摇杆垂直控制速度
-				PID_Turn.Target  = (RV * 10);	// 右摇杆水平控制转向
+				PID_Turn.Target  = (RV * 3);	// 右摇杆水平控制转向
 			}			
 		}
 

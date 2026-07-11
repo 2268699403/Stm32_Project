@@ -211,7 +211,7 @@ void Task_Comm(void *arg)
 				int8_t LH = NRF24L01_RxPacket[1];
 				int8_t RV = NRF24L01_RxPacket[4];
 				PID_Speed.Target = LH * 2;
-				PID_Turn.Target  = (RV * 10);
+				PID_Turn.Target  = (RV * 3);
 			}
 		}
 
