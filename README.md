@@ -2,7 +2,7 @@
 
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/2268699403/Stm32_Project)
 
-基于 **STM32F103C8T6** 主控芯片的双轮自平衡小车项目，采用 **PID 串级控制算法**（直立环 + 速度环 + 转向环），搭配 **MPU6050** 姿态传感器进行角度检测，**TB6612** 驱动直流减速编码电机，支持 **NRF24L01** 无线遥控与 **HC-04 蓝牙** 在线调参。
+基于 **STM32F103C8T6** 主控芯片的双轮自平衡小车项目，采用 **PID 串级控制算法**（直立环 + 速度环 + 转向环），搭配 **MPU6050** 姿态传感器进行角度检测，**TB6612** 驱动直流减速编码电机，支持 **NRF24L01** 无线遥控。新增 **ESP32-S3** 拓展模块，通过 **MiMo-V2.5** 大模型实现语音交互控制与语音反馈。
 
 ---
 
@@ -28,7 +28,9 @@
 | 直流减速电机 | 带霍尔编码器 | 2 |
 | 无线通信模块 | NRF24L01（2.4GHz） | 2 |
 | 显示模块 | 0.96寸 OLED（I2C接口，SSD1306） | 1 |
-| 蓝牙模块 | HC-04 双模蓝牙 | 1 |
+| AI 拓展模块 | ESP32-S3-R16N8（16MB Flash, 8MB PSRAM） | 1 |
+| 麦克风 | INMP441（I2S MEMS） | 1 |
+| 扬声器驱动 | MAX98357AETE + 3525 腔体喇叭 | 1 |
 | 电池 | 3.7V 18650 锂电池 | 2 |
 | 按键 | 轻触按键 | 4 |
 | LED | 指示灯 | 若干 |
@@ -43,8 +45,8 @@
 |:----:|:--------:|---------|---------|
 | PA0 | PWMA | TB6612 | 电机A PWM 调速 |
 | PA1 | PWMB | TB6612 | 电机B PWM 调速 |
-| PA2 | TXD | HC-04 蓝牙 | 蓝牙发送（USART2 TX） |
-| PA3 | RXD | HC-04 蓝牙 | 蓝牙接收（USART2 RX） |
+| PA2 | USART2_TX | ESP32-S3 | ESP32 通信（USART2 TX → ESP32 RX） |
+| PA3 | USART2_RX | ESP32-S3 | ESP32 通信（USART2 RX → ESP32 TX） |
 | PA4 | K4 | 按键4 | GPIO 输入（短按/长按） |
 | PA5 | K3 | 按键3 | GPIO 输入（短按/长按） |
 | PA6 | E1A | 编码电机1 | 编码器 A 相 |
@@ -52,8 +54,8 @@
 | PA8 | CE | NRF24L01 | SPI 片选（CE） |
 | PA9 | TX | UART排针 | 串口1 发送（USART1 TX） |
 | PA10 | RX | UART排针 | 串口1 接收（USART1 RX） |
-| PA11 | STATE | HC-04 蓝牙 | 蓝牙状态指示灯 |
-| PA12 | EN | HC-04 蓝牙 | 蓝牙使能控制 |
+| PA11 | (已释放) | 原 HC-04 STATE | 可用于车灯等扩展功能 |
+| PA12 | (已释放) | 原 HC-04 EN | 可用于车灯等扩展功能 |
 | PA15 | CSN | NRF24L01 | SPI 从机选择（CSN） |
 | PB0 | K2 | 按键2 | GPIO 输入（短按/长按） |
 | PB1 | K1 | 按键1 | GPIO 输入（短按/长按） |
@@ -102,8 +104,21 @@
 - **MPU6050** → PB10 (SCL)、PB11 (SDA)，I2C 通信
 - **OLED** → PB8 (SCL)、PB9 (SDA)，I2C 通信
 - **NRF24L01** → PA8 (CE)、PA15 (CSN)、PB3 (SCK)、PB5 (MOSI)、PB4 (MISO)，SPI 通信
-- **HC-04蓝牙** → PA2 (TXD)、PA3 (RXD)、PA11 (STATE)、PA12 (EN)，USART2 通信
-- **UART排针** → PA9 (TX)、PA10 (RX)，USART1 通信
+- **ESP32-S3** → PA2 (TX)、PA3 (RX)，USART2 115200 通信
+- **UART排针** → PA9 (TX)、PA10 (RX)，USART1 调试通信
+
+### 3.5 ESP32-S3 音频外设接线
+
+| ESP32-S3 引脚 | 连接 | 说明 |
+|-------------|------|------|
+| GPIO17 (UART RX) | STM32 PA2 (USART2 TX) | 交叉连接 |
+| GPIO18 (UART TX) | STM32 PA3 (USART2 RX) | 交叉连接 |
+| GPIO4 (I2S BCLK) | INMP441 SCK + MAX98357A BCLK | 共用时钟 |
+| GPIO5 (I2S LRCLK) | INMP441 WS + MAX98357A LRCLK | 共用帧时钟 |
+| GPIO6 (I2S SD_IN) | INMP441 SD | 麦克风数据输入 |
+| GPIO7 (I2S SD_OUT) | MAX98357A DIN | 扬声器数据输出 |
+
+> ESP32-S3 开发板通过 **USB 独立供电**，不与 STM32 共享电源，仅共地。
 
 ---
 
@@ -138,7 +153,7 @@
 │   ├── PWM.c/h              # PWM 输出初始化
 │   ├── Timer.c/h            # 定时器中断（控制周期）
 │   ├── USART1.c/h           # 串口1（调试用）
-│   └── USART2.c/h           # 串口2（蓝牙通信）
+│   └── USART2.c/h           # 串口2（ESP32 通信，115200）
 │
 ├── Library/                 # 标准外设库（STM32F10x StdPeriph）
 │   ├── misc.c/h
@@ -157,17 +172,51 @@
 ├── project.uvprojx          # Keil 工程文件
 ├── project.uvoptx           # Keil 工程选项
 └── project.uvguix.22686     # Keil 工程用户配置
+│
+├── 平衡车_ESP拓展/            # ESP32-S3 AI 语音拓展工程
+│   ├── task_plan.md             # 实施计划
+│   ├── findings.md              # 技术发现与决策
+│   ├── progress.md              # 进度日志
+│   ├── CMakeLists.txt           # ESP-IDF 顶层 cmake
+│   ├── sdkconfig.defaults       # 默认 Kconfig 配置
+│   ├── partitions.csv           # Flash 分区表
+│   └── main/                    # 应用主代码
+│       ├── CMakeLists.txt       # 组件注册
+│       ├── main.c               # 入口 + 状态机
+│       ├── wifi_mgr.c/h         # WiFi STA 连接 + AP 配网
+│       ├── recorder.c/h         # I2S 录音 (INMP441)
+│       ├── player.c/h           # I2S 播放 (MAX98357A)
+│       ├── mimo_api.c/h         # MiMo HTTP API 封装
+│       ├── uart_bridge.c/h      # UART 与 STM32 通信
+│       └── app_state.h          # 应用状态机定义
+│
+└── 遥控器/                     # NRF24L01 遥控器工程
 ```
 
 ### 4.2 软件层次说明
 
 | 层次 | 说明 |
 |------|------|
-| **User（用户层）** | 包含主函数 `main.c` 和控制算法 `PID.c`，负责系统初始化、任务调度与 PID 运算 |
+| **User（用户层）** | 包含主函数 `main.c` 和控制算法 `PID.c`，负责系统初始化、FreeRTOS 任务调度与 PID 运算 |
 | **System（系统层）** | 基础的延时函数，为上层提供时间基准 |
 | **Hardware（硬件层）** | 各硬件模块的底层驱动，向上层提供标准化接口 |
 | **Library（库层）** | STM32 标准外设库，Hardware 层基于此库进行寄存器与外设操作 |
 | **Start（启动层）** | 启动文件、CMSIS 内核文件与系统时钟配置 |
+| **ESP32（AI 层）** | ESP-IDF 工程，独立于 STM32 项目，负责录音/API 调用/TTS 播放，通过 UART 下发指令 |
+
+### 4.3 FreeRTOS 任务架构
+
+| 优先级 | 任务名 | 周期 | 栈(word) | 职责 |
+|--------|--------|------|----------|------|
+| 4 | Task_Balance | 10ms | 256 | MPU6050 读取 + 互补滤波 + 越界保护 + 直立环 PID |
+| 3 | Task_Speed | 50ms | 256 | Encoder 读取 + 速度环/转向环串级 PID + 距离闭环 |
+| 2 | Task_Cmd | 20ms | 128 | USART2 ESP32 命令解析与执行 |
+| 2 | Task_Key | 20ms | 128 | 按键扫描，短按切换系统启停(En) |
+| 1 | Task_Comm | 10ms | 256 | NRF24L01 遥控接收(6字节) + OLED 显示(100ms) + REC 触发 |
+
+周期通过 `vTaskDelayUntil` 实现恒定周期。LED 由 Task_Balance 控制（ON=运行, OFF=停止）。
+
+**并发策略**：不加锁 + 单写者原则——每个共享变量只允许一个任务写入，利用 Cortex-M3 32 位读写原子性避免竞争。
 
 ---
 
@@ -272,26 +321,46 @@ OLED 显示屏实时显示以下数据：
 
 > 可通过修改 `main.c` 中的 `OLED_Show*` 函数自定义显示内容。
 
-### 7.4 蓝牙在线调参
+### 7.4 ESP32 AI 语音控制
 
-HC-04 蓝牙模块（USART2）支持通过串口助手在线调节 PID 参数：
+ESP32-S3 通过 **USART2（115200 波特率）** 下发控制指令：
 
 | 命令格式 | 说明 | 示例 |
 |---------|------|------|
-| `Kp=3.5` | 设置直立环比例系数 | `Kp=3.5` |
-| `Ki=0.3` | 设置直立环积分系数 | `Ki=0.3` |
-| `Kd=6.5` | 设置直立环微分系数 | `Kd=6.5` |
-| `speed=20` | 设置速度环目标值 | `speed=20` |
-| `Turn=30` | 设置转向环目标值 | `Turn=30` |
+| `forward:N\n` | 前进 N 厘米 | `forward:100\n` → 前进 1 米 |
+| `back:N\n` | 后退 N 厘米 | `back:50\n` → 后退 50 厘米 |
+| `left:N\n` | 左转 N 度 | `left:45\n` → 左转 45° |
+| `right:N\n` | 右转 N 度 | `right:90\n` → 右转 90° |
+| `stop\n` | 紧急停止 | `stop\n` |
+| `light:on\n` | 开灯（板载 LED PC13） | `light:on\n` |
+| `light:off\n` | 关灯 | `light:off\n` |
+| `balance:on\n` | 开启自平衡 | `balance:on\n` |
+| `balance:off\n` | 关闭自平衡 | `balance:off\n` |
 
-> 蓝牙调参功能默认被注释，如需使用请在 `main.c` 中取消 `USART2_ParseParam` 相关行的注释。
+多条指令用 `;` 分隔：`forward:100;light:on\n`
 
-### 7.5 NRF24L01 无线遥控
+STM32 执行完成后回复 `OK\n`，失败回复 `ERR:原因\n`。
+
+**录音触发**：遥控器按下语音按键 → STM32 收到 NRF 数据包的第 6 字节按键标志 → USART2 发送 `REC\n` → ESP32 开始录音（最长 10 秒，静音 1.5 秒自动截止）。
+
+### 7.5 ESP32 数据流
+
+```
+用户语音 → INMP441 → I2S → ESP32 录音 → Base64 WAV
+  → POST mimo-v2.5 (音频理解)
+  → 返回 JSON: {"command":"forward:100", "speech":"好的，正在前进1米"}
+    ├─ command → UART TX → STM32 立即执行
+    └─ speech → POST mimo-v2.5-tts (流式 PCM16, 24kHz, 音色:冰糖)
+                → 边收边解码 → I2S → MAX98357A → 扬声器
+```
+
+### 7.6 NRF24L01 无线遥控
 
 - 小车作为 NRF24L01 接收端，接收遥控器发送的数据包
-- 数据包格式：`[0x00, LH, LV, RH, RV]`
+- 数据包格式：`[0x00, LH, LV, RH, RV, BTN]`（6 字节）
   - `LH`：左摇杆水平方向 → 控制目标速度（`PID_Speed.Target = LH * 2`）
-  - `RV`：右摇杆垂直方向 → 控制目标转向（`PID_Turn.Target = RV * 10`）
+  - `RV`：右摇杆垂直方向 → 控制目标转向（`PID_Turn.Target = RV * 3`）
+  - `BTN`：按键标志（bit0 = 语音录音按键）
 
 ---
 
@@ -322,8 +391,8 @@ HC-04 蓝牙模块（USART2）支持通过串口助手在线调节 PID 参数：
 **Q：电机不转或单侧不转？**
 > 检查 TB6612 接线（AIN1/AIN2/BIN1/BIN2）、PWM 信号是否正常，以及电池电压是否充足。
 
-**Q：蓝牙无法连接？**
-> 检查 HC-04 的 TXD→PA2、RXD→PA3 接线，确保蓝牙模块与 STM32 交叉连接。波特率默认为 115200/9600，可在 `USART2_Init()` 中查看。
+**Q：ESP32 无法通信？**
+> 检查 USART2 交叉接线（STM32 PA2→ESP32 RX, STM32 PA3→ESP32 TX），波特率均为 115200。确保共地。
 
 **Q：NRF24L01 通信失败？**
 > 检查 SPI 接线（CE、CSN、SCK、MOSI、MISO），确保收发双方的地址和通道配置一致。
